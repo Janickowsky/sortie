@@ -28,6 +28,23 @@ class AppFixtures extends Fixture
         $populator = new \Faker\Provider\fr_FR\Person($generator);
         $number = new \Faker\Provider\Base($generator);
 
+        $site1 = new Site();
+        $site1->setNom("SAINT HERBLAIN");
+        $manager->persist($site1);
+
+        $site2 = new Site();
+        $site2->setNom("CHARTRES DE BRETAGNE");
+        $manager->persist($site2);
+
+        $site3 = new Site();
+        $site3->setNom("LA ROCHE SUR YON");
+        $manager->persist($site3);
+
+        $lorem = new \Faker\Provider\Lorem($generator);
+
+        $datt = new \Faker\Provider\DateTime($generator);
+
+        $user1 = new User();
         for($i = 0 ; $i < 10; $i++){
             $user = new User();
             $user->setNom($populator->lastName());
@@ -40,9 +57,10 @@ class AppFixtures extends Fixture
             $user->setRoles(['ROLE_USER']);
             $user->setActif(true);
             $user->setPlainPassword('test');
+            $user->setCampus($site1);
 
             $user->setPassword($this->encoder->encodePassword($user,$user->getPlainPassword()));
-
+            $user1 = $user;
             $manager->persist($user);
         }
 
@@ -113,21 +131,7 @@ class AppFixtures extends Fixture
             $lieu1 = $lieu;
         }
 
-        $site1 = new Site();
-        $site1->setNom("SAINT HERBLAIN");
-        $manager->persist($site1);
 
-        $site2 = new Site();
-        $site2->setNom("CHARTRES DE BRETAGNE");
-        $manager->persist($site2);
-
-        $site3 = new Site();
-        $site3->setNom("LA ROCHE SUR YON");
-        $manager->persist($site3);
-
-        $lorem = new \Faker\Provider\Lorem($generator);
-
-        $datt = new \Faker\Provider\DateTime($generator);
 
 
 
@@ -142,7 +146,8 @@ class AppFixtures extends Fixture
             $sortie->setLieu($lieu1);
             $sortie->setInfosSortie($lorem->sentence());
             $sortie->setNbInscriptionMax($number->numberBetween($min=2, $max=20));
-
+            $sortie->setCampus($site1);
+            $sortie->setOrganisateur($user1);
             $manager->persist($sortie);
         }
         $manager->flush();

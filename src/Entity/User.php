@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -16,9 +19,9 @@ class User implements UserInterface
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned=true"}, name="id_user")
+     * @ORM\Column(type="integer", options={"unsigned=true"}, name="id")
      */
-    private $idUser;
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -72,14 +75,34 @@ class User implements UserInterface
     private $plainPassword;
 
     /**
+     * @ORM\ManyToOne(targetEntity=Site::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $campus;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="organisateur")
+     */
+    private $mesEvenements;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Sortie::class, mappedBy="participants")
+     */
+    private $sorties;
+
+
+    /**
      * User constructor.
      */
     public function __construct(){
         $this->setRoles(['ROLE_USER']);
         $this->setActif(true);
+        $this->organisateurs = new ArrayCollection();
+        $this->mesEvenements = new ArrayCollection();
+        $this->sorties = new ArrayCollection();
     }
 
-    public function encorePassword(serPasswordEncoderInterface $encoder){
+    public function encorePassword(UserPasswordEncoderInterface $encoder){
         return $encoder->encodePassword($this, $this->getPlainPassword());
     }
 
@@ -101,7 +124,7 @@ class User implements UserInterface
 
     public function getId(): ?int
     {
-        return $this->idUser;
+        return $this->id;
     }
 
     public function getEmail(): ?string
@@ -224,6 +247,75 @@ class User implements UserInterface
     public function setActif(bool $actif): self
     {
         $this->actif = $actif;
+
+        return $this;
+    }
+
+    public function getCampus(): ?Site
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(?Site $campus): self
+    {
+        $this->campus = $campus;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Sortie[]
+     */
+    public function getMesEvenements(): Collection
+    {
+        return $this->mesEvenements;
+    }
+
+    public function addMesEvenement(Sortie $mesEvenement): self
+    {
+        if (!$this->mesEvenements->contains($mesEvenement)) {
+            $this->mesEvenements[] = $mesEvenement;
+            $mesEvenement->setOrganisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMesEvenement(Sortie $mesEvenement): self
+    {
+        if ($this->mesEvenements->removeElement($mesEvenement)) {
+            // set the owning side to null (unless already changed)
+            if ($mesEvenement->getOrganisateur() === $this) {
+                $mesEvenement->setOrganisateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Sortie[]
+     */
+    public function getSorties(): Collection
+    {
+        return $this->sorties;
+    }
+
+    public function addSorty(Sortie $sorty): self
+    {
+        if (!$this->sorties->contains($sorty)) {
+            $this->sorties[] = $sorty;
+            $sorty->addParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSorty(Sortie $sorty): self
+    {
+        if ($this->sorties->removeElement($sorty)) {
+            $sorty->removeParticipant($this);
+        }
 
         return $this;
     }
