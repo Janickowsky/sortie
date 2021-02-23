@@ -100,7 +100,7 @@ class AppFixtures extends Fixture
         $comp = new \Faker\Provider\fr_FR\Company($generator);
         $adresse = new \Faker\Provider\en_US\Address($generator);
 
-        for($i = 0; $i < 10; $i++){
+        for($i = 0; $i < 12; $i++){
             $lieu = new Lieu();
             $lieu->setNom($comp->company());
             $lieu->setRue($adresse->buildingNumber() . ' ' . $adresse->streetName());
