@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -21,6 +22,8 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank(message="Veuillez saisir votre adresse e-mail !")
+     * @Assert\Email(message="Votre adresse e-mail est invalide !")
      */
     private $email;
 
@@ -35,39 +38,24 @@ class User implements UserInterface
      */
     private $password;
 
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $pseudo;
 
-    /**
-     * @return mixed
-     */
-    public function getPseudo()
-    {
-        return $this->pseudo;
-    }
-
-    /**
-     * @param mixed $pseudo
-     */
-    public function setPseudo($pseudo): void
-    {
-        $this->pseudo = $pseudo;
-    }
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank(message="Ce champ est requis")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank(message="Ce champ est requis")
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=10)
+     * @Assert\NotBlank(message="Ce champ est requis")
+     * @Assert\Length(min = 10)
      */
     private $telephone;
 
@@ -76,6 +64,11 @@ class User implements UserInterface
      */
     private $actif;
 
+
+    /**
+     *@Assert\Length(min = 4, max = 50, minMessage = "Veuillez saisir un mot de passe d'au moins 4 caratères",
+     *      maxMessage = "Veuillez saisir un mot de passe de maximum 50 caratères")
+     */
     private $plainPassword;
 
     /**
