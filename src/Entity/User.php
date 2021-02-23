@@ -22,6 +22,8 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank(message="Veuillez saisir votre adresse e-mail !")
+     * @Assert\Email(message="Votre adresse e-mail est invalide !")
      */
     private $email;
 
@@ -52,7 +54,8 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=10)
-     *  @Assert\NotBlank(message="Ce champ est requis")
+     * @Assert\NotBlank(message="Ce champ est requis")
+     * @Assert\Length(min = 10)
      */
     private $telephone;
 
@@ -63,7 +66,8 @@ class User implements UserInterface
 
 
     /**
-     *
+     *@Assert\Length(min = 4, max = 50, minMessage = "Veuillez saisir un mot de passe d'au moins 4 caratères",
+     *      maxMessage = "Veuillez saisir un mot de passe de maximum 50 caratères")
      */
     private $plainPassword;
 

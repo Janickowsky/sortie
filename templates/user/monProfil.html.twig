@@ -4,6 +4,8 @@
 
 {% block body %}
 
+    {% form_theme UserType 'bootstrap_4_layout.html.twig' %}
+
     {{ form_start(UserType)}}
 
 
@@ -20,6 +22,12 @@
     </div>
 
     <div class="form-group">
+        {{ form_errors(UserType.telephone) }}
+        {{ form_label(UserType.telephone) }}
+        {{ form_widget(UserType.telephone, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
         {{ form_errors(UserType.email) }}
         {{ form_label(UserType.email) }}
         {{ form_widget(UserType.email, {'attr': {'class': 'form-control'}}) }}
@@ -27,16 +35,18 @@
 
     <div class="form-group">
         {{ form_errors(UserType.password) }}
-        {{ form_label(UserType.password) }}
+        {{ form_row(UserType.password)}}
         {{ form_widget(UserType.password, {'attr': {'class': 'form-control'}}) }}
     </div>
 
-    <div class="form-group">
-        {{ form_errors(UserType.telephone) }}
-        {{ form_label(UserType.telephone) }}
-        {{ form_widget(UserType.telephone, {'attr': {'class': 'form-control'}}) }}
-    </div>
+
+
     {{ form_widget(UserType.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+    <button class="btn btn-primary" >
+        <a href="{{ path('home_home') }}" style="color: white">Annuler</a>
+    </button>
+
+
 
     {{ form_end(UserType) }}
 
