@@ -13,9 +13,9 @@ class Sortie
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
-     * @ORM\Column(type="integer", options={"unsigned=true"},name="id_sortie")
+     * @ORM\Column(type="integer", options={"unsigned=true"},name="id")
      */
-    private $idSortie;
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -48,13 +48,20 @@ class Sortie
     private $infosSortie;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity=Lieu::class, inversedBy="sorties")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $lieu;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Etat::class, inversedBy="sorties")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $etat;
 
     public function getId(): ?int
     {
-        return $this->idSortie;
+        return $this->id;
     }
 
     public function getNom(): ?string
@@ -128,13 +135,25 @@ class Sortie
 
         return $this;
     }
+    
+    public function getLieu(): ?Lieu
+    {
+        return $this->lieu;
+    }
 
-    public function getEtat(): ?int
+    public function setLieu(?Lieu $lieu): self
+    {
+        $this->lieu = $lieu;
+
+        return $this;
+    }
+
+    public function getEtat(): ?Etat
     {
         return $this->etat;
     }
 
-    public function setEtat(int $etat): self
+    public function setEtat(?Etat $etat): self
     {
         $this->etat = $etat;
 

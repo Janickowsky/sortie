@@ -100,13 +100,17 @@ class AppFixtures extends Fixture
         $comp = new \Faker\Provider\fr_FR\Company($generator);
         $adresse = new \Faker\Provider\en_US\Address($generator);
 
+        $lieu1 = new Lieu();
         for($i = 0; $i < 10; $i++){
             $lieu = new Lieu();
             $lieu->setNom($comp->company());
             $lieu->setRue($adresse->buildingNumber() . ' ' . $adresse->streetName());
             $lieu->setLatitude($adresse->latitude($min=-90, $max=90));
             $lieu->setLongitude($adresse->longitude($min=-180, $max=180));
+            $lieu->setVille($ville3);
             $manager->persist($lieu);
+
+            $lieu1 = $lieu;
         }
 
         $site1 = new Site();
@@ -134,7 +138,8 @@ class AppFixtures extends Fixture
             $sortie->setDateHeureDebut($datt->dateTimeThisYear($max = '2021-12-31 23:59:59', $timezone = 'Europe/Paris'));
             $sortie->setDateLimiteInscription($datt->dateTimeThisYear($max = 'now', $timezone = 'Europe/Paris'));
             $sortie->setDuree(1);
-            $sortie->setEtat(1);
+            $sortie->setEtat($etat2);
+            $sortie->setLieu($lieu1);
             $sortie->setInfosSortie($lorem->sentence());
             $sortie->setNbInscriptionMax($number->numberBetween($min=2, $max=20));
 

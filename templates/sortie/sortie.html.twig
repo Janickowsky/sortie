@@ -1,0 +1,34 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Liste des sorties{% endblock %}
+
+{% block body %}
+    <table class="table table-hover mt-5">
+        <thead>
+        <tr class="table-active">
+            <th scope="col">Nom de la sortie</th>
+            <th scope="col">Date de la sortie</th>
+            <th scope="col">Clôture</th>
+            <th scope="col">inscrits/places</th>
+            <th scope="col">Etat</th>
+            <th scope="col">Inscrit</th>
+            <th scope="col">Organisateur</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for sortie in sorties %}
+            <tr class="table-light">
+                <th>{{ sortie.nom }}</th>
+                <th>{{ sortie.dateHeureDebut|format_datetime('short','short',locale='fr') }}</th>
+                <th>{{ sortie.dateLimiteInscription|format_datetime('short', 'none',locale='fr') }}</th>
+                <th>TODO</th>
+                <th>{{ sortie.etat.libelle }}</th>
+                <th>TODO</th>
+                <th>TODO</th>
+                <th>TODO</th>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
