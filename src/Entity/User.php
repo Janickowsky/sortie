@@ -79,6 +79,18 @@ class User implements UserInterface
     private $plainPassword;
 
     /**
+     * User constructor.
+     */
+    public function __construct(){
+        $this->setRoles(['ROLE_USER']);
+        $this->setActif(true);
+    }
+
+    public function encorePassword(serPasswordEncoderInterface $encoder){
+        return $encoder->encodePassword($this, $this->getPlainPassword());
+    }
+
+    /**
      * @return mixed
      */
     public function getPlainPassword()
