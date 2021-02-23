@@ -23,8 +23,13 @@ class UserController extends AbstractController
      * @Route(name="monProfil", path="/monProfil", methods={"GET", "POST"})
      */
     public function profilForm(Request $request, EntityManagerInterface $em){
+    if($this->getUser()){
+        $user= $this->getUser();
 
+    }else{
         $user = new User();
+    }
+
 
         // Création du formulaire
         $form = $this->createForm(UserType::class, $user);

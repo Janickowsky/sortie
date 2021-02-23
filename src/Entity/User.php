@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -35,39 +36,23 @@ class User implements UserInterface
      */
     private $password;
 
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $pseudo;
 
-    /**
-     * @return mixed
-     */
-    public function getPseudo()
-    {
-        return $this->pseudo;
-    }
-
-    /**
-     * @param mixed $pseudo
-     */
-    public function setPseudo($pseudo): void
-    {
-        $this->pseudo = $pseudo;
-    }
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank(message="Ce champ est requis")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank(message="Ce champ est requis")
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=10)
+     *  @Assert\NotBlank(message="Ce champ est requis")
      */
     private $telephone;
 
@@ -76,6 +61,10 @@ class User implements UserInterface
      */
     private $actif;
 
+
+    /**
+     *
+     */
     private $plainPassword;
 
     /**
