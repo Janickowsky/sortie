@@ -1,0 +1,48 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+
+    {{ form_start(UserType)}}
+
+    <div class="form-group">
+        {{ form_errors(UserType.pseudo) }}
+        {{ form_label(UserType.pseudo) }}
+        {{ form_widget(UserType.pseudo, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_errors(UserType.nom) }}
+        {{ form_label(UserType.nom) }}
+        {{ form_widget(UserType.nom, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_errors(UserType.prenom) }}
+        {{ form_label(UserType.prenom) }}
+        {{ form_widget(UserType.prenom, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_errors(UserType.email) }}
+        {{ form_label(UserType.email) }}
+        {{ form_widget(UserType.email, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_errors(UserType.password) }}
+        {{ form_label(UserType.password) }}
+        {{ form_widget(UserType.password, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_errors(UserType.telephone) }}
+        {{ form_label(UserType.telephone) }}
+        {{ form_widget(UserType.telephone, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    {{ form_widget(UserType.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+
+    {{ form_end(UserType) }}
+
+{% endblock %}
