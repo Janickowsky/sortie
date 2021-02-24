@@ -7,9 +7,12 @@ use App\Entity\Sortie;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\ResetType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -30,12 +33,15 @@ class SortieType extends AbstractType
             'trim' => true,
             'required' => true,
             'date_widget' => 'single_text',
+            'time_widget' => 'single_text',
         ]);
 
         $builder->add('dateLimiteInscription', DateTimeType::class, [
             'label' => 'Date limite d\'inscription:',
             'trim' => true,
             'required' => true,
+            'date_widget' => 'single_text',
+            'time_widget' => 'single_text',
         ]);
 
         $builder->add('nbInscriptionMax', NumberType::class, [
