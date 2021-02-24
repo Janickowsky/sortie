@@ -7,8 +7,7 @@ use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -24,19 +23,19 @@ class UserType extends AbstractType
 
         $builder->add('pseudo', TextType::class,[
             'label' =>'Pseudo :',
-            'required' => false,
+            'required' => true,
             'trim' => true,
         ]);
 
         $builder->add('nom', TextType::class,[
             'label' =>'Nom :',
-            'required' => false,
+            'required' => true,
             'trim' => true,
         ]);
 
         $builder->add('prenom',TextType::class, [
             'label' => 'Prénom :',
-            'required' => false,
+            'required' => true,
             'trim' => true
         ]);
 
@@ -46,9 +45,9 @@ class UserType extends AbstractType
             'trim' => true
         ]);
 
-        $builder->add('email',TextType::class, [
-            'label' => 'Email:',
-            'required' => false,
+        $builder->add('email',EmailType::class, [
+            'label' => 'Email :',
+            'required' => true,
             'trim' => true,
         ]);
 
@@ -57,8 +56,8 @@ class UserType extends AbstractType
             'invalid_message' => 'Password non conforme !',
             'options' => ['attr' => ['class' => 'password-field']],
             'required' => true,
-            'first_options'  => ['label' => 'Password'],
-            'second_options' => ['label' => 'Confirmation'],
+            'first_options'  => ['label' => 'Password :'],
+            'second_options' => ['label' => 'Confirmation :'],
         ]);
 
 
@@ -71,10 +70,9 @@ class UserType extends AbstractType
             },
             'choice_label'=> 'nom',
             'placeholder'=> 'Choisir un campus',
-            'required' => false,
+            'required' => true,
             'trim' => true,
         ]);
-
 
 
         $builder->add ('submit', SubmitType::class, [
