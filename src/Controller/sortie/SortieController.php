@@ -24,14 +24,4 @@ class SortieController extends AbstractController{
 
         return $this->render("sortie/sortie.html.twig",["sorties" => $sorties]);
     }
-
-    /**
-     * @Route(name="detailSortie", path="/detailSortie-{id}", methods={"GET"})
-     */
-    public function sortieDetail(Request $request, EntityManagerInterface $em){
-        $id = $request->get('id');
-        $sortie= $em->getRepository('App:Sortie')->getIdeaByIdQB($id);
-
-        return $this->render("sortie/sortieDetail.html.twig", ['sortie' => $sortie]);
-    }
 }

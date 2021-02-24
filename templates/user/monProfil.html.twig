@@ -4,9 +4,15 @@
 
 {% block body %}
 
-    {% form_theme UserType 'bootstrap_4_layout.html.twig' %}
+
 
     {{ form_start(UserType)}}
+
+    <div class="form-group">
+        {{ form_errors(UserType.pseudo) }}
+        {{ form_label(UserType.pseudo) }}
+        {{ form_widget(UserType.pseudo, {'attr': {'class': 'form-control'}}) }}
+    </div>
 
     <div class="form-group">
         {{ form_errors(UserType.nom) }}
@@ -34,8 +40,16 @@
 
     <div class="form-group">
         {{ form_errors(UserType.password) }}
-        {{ form_row(UserType.password)}}
-        {{ form_widget(UserType.password, {'attr': {'class': 'form-control'}}) }}
+        {{ form_label(UserType.password.first)}}
+        {{ form_widget(UserType.password.first, {'attr': {'class': 'form-control'}}) }}
+        {{ form_label(UserType.password.second)}}
+        {{ form_widget(UserType.password.second, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_errors(UserType.campus) }}
+        {{ form_label(UserType.campus)}}
+        {{ form_widget(UserType.campus, {'attr': {'class': 'form-control'}}) }}
     </div>
 
 

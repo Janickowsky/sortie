@@ -1,0 +1,35 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Liste des sorties{% endblock %}
+
+{% block body %}
+
+    <div class="form-group">
+    {{ form_label(formSortie.nom) }}
+    {{ form_widget(formSortie.nom, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="form-group">
+    {{ form_label(formSortie.dateHeureDebut) }}
+    {{ form_widget(formSortie.dateHeureDebut) }}
+    </div>
+    <div class="form-group">
+    {{ form_label(formSortie.dateLimiteInscription) }}
+    {{ form_widget(formSortie.dateLimiteInscription) }}
+    </div>
+    <div class="form-group">
+    {{ form_label(formSortie.nbInscriptionMax) }}
+    {{ form_widget(formSortie.nbInscriptionMax, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(formSortie.duree) }}
+        {{ form_widget(formSortie.duree, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(formSortie.infosSortie) }}
+        {{ form_widget(formSortie.infosSortie, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(formSortie.lieu) }}
+        {{ form_widget(formSortie.lieu, {'attr': {'class': 'form-control'}}) }}
+    </div>
+{% endblock %}
