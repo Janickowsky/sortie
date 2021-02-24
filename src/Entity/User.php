@@ -41,8 +41,6 @@ class User implements UserInterface
      */
     private $password;
 
-
-
     /**
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank(message="Ce champ est requis")
@@ -89,6 +87,11 @@ class User implements UserInterface
      * @ORM\ManyToMany(targetEntity=Sortie::class, mappedBy="participants")
      */
     private $sorties;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $pseudo;
 
 
     /**
@@ -316,6 +319,18 @@ class User implements UserInterface
         if ($this->sorties->removeElement($sorty)) {
             $sorty->removeParticipant($this);
         }
+
+        return $this;
+    }
+
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    public function setPseudo(string $pseudo): self
+    {
+        $this->pseudo = $pseudo;
 
         return $this;
     }
