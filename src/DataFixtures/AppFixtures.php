@@ -43,10 +43,12 @@ class AppFixtures extends Fixture
         $lorem = new \Faker\Provider\Lorem($generator);
 
         $datt = new \Faker\Provider\DateTime($generator);
+        $internet = new \Faker\Provider\Internet($generator);
 
         $user1 = new User();
         for($i = 0 ; $i < 10; $i++){
             $user = new User();
+            $user->setPseudo($internet->userName());
             $user->setNom($populator->lastName());
             $user->setPrenom($populator->firstNameMale());
             $user->setEmail($user->getPrenom() . '.' . $user->getNom() . '@campus-eni.fr');
