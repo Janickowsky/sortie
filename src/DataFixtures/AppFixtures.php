@@ -24,135 +24,244 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         require_once 'vendor/autoload.php';
-        $generator = \Faker\Factory::create('fr_FR');
-        $populator = new \Faker\Provider\fr_FR\Person($generator);
-        $number = new \Faker\Provider\Base($generator);
 
-        $site1 = new Site();
-        $site1->setNom("SAINT HERBLAIN");
-        $manager->persist($site1);
+        $sites = $this->createSite();
+        foreach($sites as $site){
+            $manager->persist($site);
+        }
 
-        $site2 = new Site();
-        $site2->setNom("CHARTRES DE BRETAGNE");
-        $manager->persist($site2);
+        $etats = $this->createEtat();
+        foreach($etats as $etat){
+            $manager->persist($etat);
+        }
 
-        $site3 = new Site();
-        $site3->setNom("LA ROCHE SUR YON");
-        $manager->persist($site3);
+        $villes = $this->createVille();
+        foreach($villes as $ville){
+            $manager->persist($ville);
+        }
 
-        $lorem = new \Faker\Provider\Lorem($generator);
 
-        $datt = new \Faker\Provider\DateTime($generator);
-        $internet = new \Faker\Provider\Internet($generator);
+        $lieux = $this->createLieu(15,$villes);
+        foreach($lieux as $lieu){
+            $manager->persist($lieu);
+        }
 
-        $user1 = new User();
-        for($i = 0 ; $i < 10; $i++){
-            $user = new User();
-            $user->setPseudo($internet->userName());
-            $user->setNom($populator->lastName());
-            $user->setPrenom($populator->firstNameMale());
-            $user->setEmail($user->getPrenom() . '.' . $user->getNom() . '@campus-eni.fr');
-
-            $nb = $number->randomNumber(8);
-
-            $user->setTelephone('06' . $nb);
-            $user->setRoles(['ROLE_USER']);
-            $user->setActif(true);
-            $user->setPlainPassword('test');
-            $user->setCampus($site1);
-
-            $user->setPassword($this->encoder->encodePassword($user,$user->getPlainPassword()));
-            $user1 = $user;
+        $users = $this->createUser(30,$sites);
+        foreach($users as $user){
             $manager->persist($user);
         }
 
+        $sorties = $this->createSortie(200,$lieux,$sites,$users,$etats);
+        foreach($sorties as $sortie){
+
+            $manager->persist($sortie);
+        }
+
+        $manager->flush();
+
+    }
+
+    /**
+     * @return array
+     * Fonction qui créer des campus
+     */
+    private function createSite(){
+        $sites = Array();
+
+        $site1 = new Site();
+        $site1->setNom("SAINT HERBLAIN");
+
+        $site2 = new Site();
+        $site2->setNom("CHARTRES DE BRETAGNE");
+
+        $site3 = new Site();
+        $site3->setNom("LA ROCHE SUR YON");
+
+        $sites[0] = $site1;
+        $sites[1] = $site2;
+        $sites[2] = $site3;
+        return $sites;
+    }
+
+    /**
+     * @return array
+     * Fonciton qui créer les états des sorties
+     */
+    private function createEtat(){
+        $etats = Array();
+
         $etat1 = new Etat();
         $etat1->setLibelle('Créée');
-        $manager->persist($etat1);
 
         $etat2 = new Etat();
         $etat2->setLibelle('Ouverte');
-        $manager->persist($etat2);
 
         $etat3 = new Etat();
         $etat3->setLibelle('Clôturée');
-        $manager->persist($etat3);
 
         $etat4 = new Etat();
         $etat4->setLibelle('Activité en cours');
-        $manager->persist($etat4);
 
         $etat5 = new Etat();
         $etat5->setLibelle('Passée');
-        $manager->persist($etat5);
 
         $etat6 = new Etat();
         $etat6->setLibelle('Annulée');
-        $manager->persist($etat6);
 
+        $etats[0] = $etat1;
+        $etats[1] = $etat2;
+        $etats[2] = $etat3;
+        $etats[3] = $etat4;
+        $etats[4] = $etat5;
+        $etats[5] = $etat6;
+
+        return $etats;
+    }
+
+    /**
+     * @return array
+     * Fonction qui créer les villes
+     */
+    private function createVille(){
+        $villes = Array();
 
         $ville1 = new Ville();
         $ville1->setNom("Nantes");
         $ville1->setCodePostal("44000");
-        $manager->persist($ville1);
+
 
         $ville2 = new Ville();
         $ville2->setNom("Angers");
         $ville2->setCodePostal("49000");
-        $manager->persist($ville2);
+
 
         $ville3 = new Ville();
         $ville3->setNom("ST Herblain");
         $ville3->setCodePostal("44800");
-        $manager->persist($ville3);
+
 
         $ville4 = new Ville();
         $ville4->setNom("Rennes");
         $ville4->setCodePostal("35000");
-        $manager->persist($ville4);
+
 
         $ville5 = new Ville();
         $ville5->setNom("Rezé");
         $ville5->setCodePostal("44400");
-        $manager->persist($ville5);
 
+        $villes[0] = $ville1;
+        $villes[1] = $ville2;
+        $villes[2] = $ville3;
+        $villes[3] = $ville4;
+        $villes[4] = $ville5;
 
+        return $villes;
+    }
+
+    /**
+     * @param int $nbLieu
+     * @param $villes
+     * @return array
+     * Fonction qui créer les lieux
+     */
+    private function createLieu(int $nbLieu, $villes){
+        $generator = \Faker\Factory::create('fr_FR');
         $comp = new \Faker\Provider\fr_FR\Company($generator);
         $adresse = new \Faker\Provider\en_US\Address($generator);
+        $number = new \Faker\Provider\Base($generator);
 
-        $lieu1 = new Lieu();
-        for($i = 0; $i < 10; $i++){
+        $lieux = Array();
+
+        for($i = 0; $i <= $nbLieu; $i++){
             $lieu = new Lieu();
             $lieu->setNom($comp->company());
             $lieu->setRue($adresse->buildingNumber() . ' ' . $adresse->streetName());
             $lieu->setLatitude($adresse->latitude($min=-90, $max=90));
             $lieu->setLongitude($adresse->longitude($min=-180, $max=180));
-            $lieu->setVille($ville3);
-            $manager->persist($lieu);
+            $lieu->setVille($villes[$number->numberBetween(0,sizeof($villes) -1)]);
 
-            $lieu1 = $lieu;
+
+            $lieux[$i] = $lieu;
         }
 
+        return $lieux;
+    }
 
+    /**
+     * @param int $nbSortie
+     * @param $lieux
+     * @param $sites
+     * @param $users
+     * @param $etats
+     * @return array
+     * Fonction qui créer les sorties
+     */
+    private function createSortie(int $nbSortie, $lieux, $sites, $users, $etats){
+        $generator = \Faker\Factory::create('fr_FR');
+        $number = new \Faker\Provider\Base($generator);
+        $lorem = new \Faker\Provider\Lorem($generator);
+        $datt = new \Faker\Provider\DateTime($generator);
 
+        $sorties = Array();
 
-
-        for($i = 0; $i < 30; $i++){
+        for($i = 0; $i <= $nbSortie; $i++){
             $sortie= new Sortie();
 
             $sortie->setNom($lorem->word());
             $sortie->setDateHeureDebut($datt->dateTimeThisYear($max = '2021-12-31 23:59:59', $timezone = 'Europe/Paris'));
             $sortie->setDateLimiteInscription($datt->dateTimeThisYear($max = 'now', $timezone = 'Europe/Paris'));
             $sortie->setDuree(1);
-            $sortie->setEtat($etat2);
-            $sortie->setLieu($lieu1);
+            $sortie->setEtat($etats[$number->numberBetween(0,sizeof($etats) -1 )]);
+            $sortie->setLieu($lieux[$number->numberBetween(0,sizeof($lieux) -1 )]);
             $sortie->setInfosSortie($lorem->sentence());
-            $sortie->setNbInscriptionMax($number->numberBetween($min=2, $max=20));
-            $sortie->setCampus($site1);
-            $sortie->setOrganisateur($user1);
-            $manager->persist($sortie);
-        }
-        $manager->flush();
+            $sortie->setNbInscriptionMax($number->numberBetween($min=1, $max=8));
+            $sortie->setCampus($sites[$number->numberBetween(0,sizeof($sites) -1)]);
+            $sortie->setOrganisateur($users[$number->numberBetween(0,sizeof($users) -1 )]);
 
+            $nbParticipant = $number->numberBetween(1,$sortie->getNbInscriptionMax());
+            for($j=1; $j <= $nbParticipant; $j++){
+                $sortie->addParticipant($users[$j]);
+                $users[$j]->addSorty($sortie);
+            }
+
+            $sorties[$i] = $sortie;
+        }
+        return $sorties;
+    }
+
+    /**
+     * @param int $nbUser
+     * @param $sites
+     * @return array
+     * Fonction qui creer des utilisateurs
+     */
+    private function createUser(int $nbUser, $sites){
+        $generator = \Faker\Factory::create('fr_FR');
+        $internet = new \Faker\Provider\Internet($generator);
+        $populator = new \Faker\Provider\fr_FR\Person($generator);
+        $number = new \Faker\Provider\Base($generator);
+
+        $users = Array();
+
+        for($i = 0 ; $i <= $nbUser; $i++){
+            $user = new User();
+            $user->setPseudo($internet->userName());
+            $user->setNom($populator->lastName());
+            $user->setPrenom($populator->firstNameMale());
+            $user->setEmail($user->getPrenom() . '.' . $user->getNom() . '@campus-eni.fr');
+            $nb = $number->randomNumber(8);
+
+            $user->setTelephone('06' . $nb);
+            $user->setRoles(['ROLE_USER']);
+            $user->setActif(true);
+            $user->setPlainPassword('test');
+            $user->setCampus($sites[$number->numberBetween(0,sizeof($sites) -1 )]);
+
+            $user->setPassword($this->encoder->encodePassword($user,$user->getPlainPassword()));
+
+            $users[$i] = $user;
+        }
+
+       return $users;
     }
 }
