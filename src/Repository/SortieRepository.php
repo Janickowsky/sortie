@@ -30,6 +30,9 @@ class SortieRepository extends ServiceEntityRepository
 
     public function getSortieById(int $id){
         $req = $this->createQueryBuilder('sortie')
+            ->innerjoin('sortie.participants','user')->addSelect('user')
+            ->innerJoin('sortie.lieu', 'lieu')->addSelect('lieu')
+            ->innerJoin('lieu.ville', 'ville')->addSelect('ville')
             ->where('sortie.id = :id')
             ->setParameter('id', $id);
 

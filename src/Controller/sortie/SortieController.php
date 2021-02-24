@@ -6,6 +6,7 @@ namespace App\Controller\sortie;
 
 use App\Entity\Etat;
 use App\Entity\Sortie;
+use App\Entity\User;
 use App\Form\SortieType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,7 +36,9 @@ class SortieController extends AbstractController{
      * @Route(name="detailSortie", path="/detailsortie-{id}", requirements={"id":"\d+"}, methods={"GET"})
      */
     public function detailSortie(Request $request, EntityManagerInterface $entityManager){
+
         $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
+
         return $this->render("sortie/sortieDetail.html.twig", [
             'sortie'=>$sortie
         ]);
