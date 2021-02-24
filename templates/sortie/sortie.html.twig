@@ -26,7 +26,7 @@
                 <th>{{ sortie.etat.libelle }}</th>
                 <th>TODO</th>
                 <th>{{ sortie.organisateur.nom }}</th>
-                <th>TODO</th>
+                <th><a href="{{ path('sortie_detailSortie') }}">Afficher</a></th>
             </tr>
         {% endfor %}
         </tbody>
