@@ -2,10 +2,15 @@
 
 namespace App\Form;
 
+use App\Entity\Lieu;
 use App\Entity\Sortie;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,6 +29,7 @@ class SortieType extends AbstractType
             'label' => 'Date et heure de la sortie:',
             'trim' => true,
             'required' => true,
+            'date_widget' => 'single_text',
         ]);
 
         $builder->add('dateLimiteInscription', DateTimeType::class, [
@@ -32,14 +38,37 @@ class SortieType extends AbstractType
             'required' => true,
         ]);
 
-        $builder->add('nbInscriptionMax', IntegerType::class, [
+        $builder->add('nbInscriptionMax', NumberType::class, [
             'label' => 'Nombre de places:',
             'trim' => true,
             'required' => true,
         ]);
 
+        $builder->add('duree', IntegerType::class, [
+            'label' => 'Duree:',
+            'trim' => true,
+            'required' => true,
+        ]);
 
+        $builder->add('infosSortie', TextareaType::class, [
+            'label' => 'Description et infos:',
+            'trim' => true,
+            'required' => true,
+        ]);
 
+        $builder->add('lieu', EntityType::class, [
+            'label' => 'Lieu:',
+            'trim' => true,
+            'required' => true,
+            'class' => Lieu::class,
+            'choice_label' => 'nom',
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('lieu')
+                    ->orderBy('lieu.nom', 'ASC');
+            },
+            'multiple' => false,
+            'placeholder' => 'Choisir un lieu',
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
