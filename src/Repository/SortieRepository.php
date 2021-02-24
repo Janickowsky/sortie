@@ -27,4 +27,12 @@ class SortieRepository extends ServiceEntityRepository
 
         return $req->getQuery()->getResult();
     }
+
+    public function getSortieById(int $id){
+        $req = $this->createQueryBuilder('sortie')
+            ->where('sortie.id = :id')
+            ->setParameter('id', $id);
+
+        return $req->getQuery()->getSingleResult();
+    }
 }

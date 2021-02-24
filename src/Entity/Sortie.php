@@ -6,6 +6,7 @@ use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SortieRepository::class)
@@ -21,49 +22,73 @@ class Sortie
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank(message="Veuillez saisir un nom!")
+     * @Assert\Length(min = 4, max = 100, minMessage = "Veuillez saisir un nom d'au moins 4 caratères",
+     *      maxMessage = "Veuillez saisir un mot de passe d'au moins 100 caratères")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="datetime", name="date_heure_debut")
+     * @Assert\NotBlank(message="Veuillez saisir une date de début!")
+     * @Assert\DateTime(message="La valeur saisie doit être un date heure!")
      */
     private $dateHeureDebut;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="Veuillez saisir une duree!")
+     * @Assert\Positive(message="La duree doit être positive!")
+     *  @Assert\Type(
+     *     type="integer",
+     *     message="La valeur {{ value }} n'est pas un valide {{ type }}."
+     * )
      */
     private $duree;
 
     /**
      * @ORM\Column(type="datetime", name="date_limite_inscription")
+     * @Assert\NotBlank(message="Veuillez saisir une date limite d'inscription!")
+     * @Assert\DateTime(message="La valeur saisie doit être un date heure!")
      */
     private $dateLimiteInscription;
 
     /**
      * @ORM\Column(type="smallint", name="nb_inscription_max")
+     * @Assert\NotBlank(message="Veuillez saisir un nombre de place!")
+     * @Assert\Positive(message="La duree doit être positive!")
+     * @Assert\Type(
+     *     type="integer",
+     *     message="La valeur {{ value }} n'est pas un valide {{ type }}."
+     * )
      */
     private $nbInscriptionMax;
 
     /**
      * @ORM\Column(type="text", name="infos_sortie")
+     * @Assert\NotBlank(message="Veuillez saisir une description!")
+     * @Assert\Type("string")
      */
     private $infosSortie;
 
     /**
      * @ORM\ManyToOne(targetEntity=Lieu::class, inversedBy="sorties")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Veuillez saisir un lieu!")
      */
     private $lieu;
 
     /**
      * @ORM\ManyToOne(targetEntity=Etat::class, inversedBy="sorties")
      * @ORM\JoinColumn(nullable=false)
+     *
      */
     private $etat;
 
     /**
      * @ORM\ManyToOne(targetEntity=Site::class, inversedBy="sorties")
      * @ORM\JoinColumn(nullable=false)
+     *
      */
     private $campus;
 
