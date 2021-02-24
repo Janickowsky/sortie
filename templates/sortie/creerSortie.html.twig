@@ -3,7 +3,11 @@
 {% block title %}Liste des sorties{% endblock %}
 
 {% block body %}
+
+    {% form_theme formSortie 'bootstrap_4_layout.html.twig' %}
+
     <h1>Créer une sortie</h1>
+
     {{  form_start(formSortie) }}
     <div class="form-group">
     {{ form_label(formSortie.nom) }}
