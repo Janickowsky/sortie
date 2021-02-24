@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Détails d'un profil{% endblock %}
+
+{% block body %}
+
+
+
+   <div class="container">
+       <h1>{{ user.pseudo }}</h1>
+       <ul>
+          <li>{{ user.nom}}</li>
+          <li>{{ user.prenom }}</li>
+          <li>{{ user.telephone }}</li>
+          <li>{{ user.email }}</li>
+           <li>{{ user.campus.nom }}</li>
+       </ul>
+   </div>
+
+    <button class="btn btn-primary" >
+        <a href="{{ path('home_home') }}" style="color: white">Retour</a>
+    </button>
+
+{% endblock %}
