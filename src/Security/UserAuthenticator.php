@@ -71,7 +71,7 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator implements Passwo
 
         if (!$user) {
             // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Votre e-mail n\'a pas été trouvé');
+            throw new CustomUserMessageAuthenticationException('Email ou mot de passe invalide');
         }
 
         return $user;
@@ -79,7 +79,13 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator implements Passwo
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        if($this->passwordEncoder->isPasswordValid($user, $credentials['password'])){
+            return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        } else{
+            throw new CustomUserMessageAuthenticationException('Email ou mot de passe invalide');
+        }
+
+
     }
 
     /**
