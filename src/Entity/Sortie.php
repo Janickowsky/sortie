@@ -32,6 +32,7 @@ class Sortie
      * @ORM\Column(type="datetime", name="date_heure_debut")
      * @Assert\NotBlank(message="Veuillez saisir une date de début!")
      * @Assert\DateTime(message="La valeur saisie doit être un date heure!")
+     * @Assert\GreaterThanOrEqual("today", message="L'heure du début de l'evenement doit être supérieure à la date d'aujourd'hui")
      */
     private $dateHeureDebut;
 
@@ -50,6 +51,7 @@ class Sortie
      * @ORM\Column(type="datetime", name="date_limite_inscription")
      * @Assert\NotBlank(message="Veuillez saisir une date limite d'inscription!")
      * @Assert\DateTime(message="La valeur saisie doit être un date heure!")
+     * @Assert\GreaterThan(propertyPath="dateHeureDebut", message="La date limite d'inscriptions doit être supérieure à la date de début d'évenement")
      */
     private $dateLimiteInscription;
 
