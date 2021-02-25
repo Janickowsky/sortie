@@ -25,6 +25,7 @@ class LieuRepository extends ServiceEntityRepository
             ->setParameter('id_ville', $idVille);
         return $req->getQuery()->getResult();
     }
+
     public function getAllSortie(){
         $req = $this->createQueryBuilder('lieu')
             ->where("lieu.nom");
