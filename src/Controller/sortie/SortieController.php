@@ -147,8 +147,7 @@ class SortieController extends AbstractController{
     public function sinscrire(Request $request, EntityManagerInterface $entityManager){
         $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
 
-        //TODO voir date => etat en cours
-        if(count($sortie->getParticipants()) < $sortie->getNbInscriptionMax()){
+        if($sortie->getEtat()->getLibelle() == self::ETAT_OUVERTURE && count($sortie->getParticipants()) < $sortie->getNbInscriptionMax()){
             $sortie->addParticipant($this->getUser());
             $this->getUser()->addSorty($sortie);
             $entityManager->persist($sortie);
