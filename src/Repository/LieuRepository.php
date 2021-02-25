@@ -19,6 +19,12 @@ class LieuRepository extends ServiceEntityRepository
         parent::__construct($registry, Lieu::class);
     }
 
+    public function getAllSortie(){
+        $req = $this->createQueryBuilder('lieu')
+            ->where("lieu.nom");
+
+        return $req->getQuery()->getResult();
+    }
     // /**
     //  * @return Lieu[] Returns an array of Lieu objects
     //  */
