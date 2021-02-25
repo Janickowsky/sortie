@@ -249,9 +249,8 @@ class AppFixtures extends Fixture
             $user->setPseudo($internet->userName());
             $user->setNom($populator->lastName());
             $user->setPrenom($populator->firstNameMale());
-            $user->setEmail($user->getPrenom() . '.' . $user->getNom() . '@campus-eni.fr');
+            $user->setEmail($internet->userName() . "@" . $internet->freeEmailDomain());
             $nb = $number->randomNumber(8);
-
             $user->setTelephone('06' . $nb);
             $user->setRoles(['ROLE_USER']);
             $user->setActif(true);

@@ -23,9 +23,13 @@
                     <th>{{ sortie.nom }}</th>
                     <th>{{ sortie.dateHeureDebut|format_datetime('short','short',locale='fr') }}</th>
                     <th>{{ sortie.dateLimiteInscription|format_datetime('short', 'none',locale='fr') }}</th>
-                    <th>TODO</th>
+                    <th>{{ sortie.participants|length }}/ {{ sortie.nbInscriptionMax }}</th>
                     <th>{{ sortie.etat.libelle }}</th>
-                    <th>TODO</th>
+                    {% if app.user in sortie.participants %}
+                        <th>X</th>
+                    {% else %}
+                        <th> </th>
+                    {% endif %}
                     <th>{{ sortie.organisateur.pseudo }}</th>
                     <th><a href="{{ path('sortie_detailSortie', {'id': sortie.getId()}) }}">Afficher</a></th>
                 </tr>
