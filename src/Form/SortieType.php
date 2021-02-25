@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Entity\Ville;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -17,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Blank;
 
 class SortieType extends AbstractType
 {
@@ -61,6 +63,22 @@ class SortieType extends AbstractType
             'trim' => true,
             'required' => true,
         ]);
+
+        $builder->add('ville', EntityType::class, [
+            'label' => 'Ville:',
+            'trim' => true,
+            'mapped' => false,
+            'required' => true,
+            'class' => Ville::class,
+            'choice_label' => 'nom',
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('ville')
+                    ->orderBy('ville.nom', 'ASC');
+            },
+            'multiple' => false,
+            'placeholder' => 'Choisir une ville',
+        ]);
+
 
         $builder->add('lieu', EntityType::class, [
             'label' => 'Lieu:',
