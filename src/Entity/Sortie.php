@@ -118,7 +118,7 @@ class Sortie
         return $this->nom;
     }
 
-    public function setNom(string $nom): self
+    public function setNom(?string $nom): self
     {
         $this->nom = $nom;
 
@@ -142,7 +142,7 @@ class Sortie
         return $this->duree;
     }
 
-    public function setDuree(int $duree): self
+    public function setDuree(?int $duree): self
     {
         $this->duree = $duree;
 
@@ -166,7 +166,7 @@ class Sortie
         return $this->nbInscriptionMax;
     }
 
-    public function setNbInscriptionMax(int $nbInscriptionMax): self
+    public function setNbInscriptionMax(?int $nbInscriptionMax): self
     {
         $this->nbInscriptionMax = $nbInscriptionMax;
 
@@ -178,7 +178,7 @@ class Sortie
         return $this->infosSortie;
     }
 
-    public function setInfosSortie(string $infosSortie): self
+    public function setInfosSortie(?string $infosSortie): self
     {
         $this->infosSortie = $infosSortie;
 

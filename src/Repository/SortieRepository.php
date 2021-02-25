@@ -23,6 +23,7 @@ class SortieRepository extends ServiceEntityRepository
         $req = $this->createQueryBuilder('sortie')
             ->innerJoin('sortie.etat', 'etat')->addSelect('etat')
             ->where("etat.libelle = 'Ouverte'")
+            ->orWhere("etat.libelle = 'Créée'")
             ->orderBy('sortie.dateHeureDebut', 'desc');
 
         return $req->getQuery()->getResult();

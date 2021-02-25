@@ -3,6 +3,13 @@
 {% block title %}Liste des sorties{% endblock %}
 
 {% block body %}
+
+    {% for message in app.flashes('success') %}
+        <div class="d-flex alert alert-success justify-content-center">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     <div class="mt-5 overflow-auto text-left" style="height: 300px;">
         <table class="table table-hover">
             <thead>
@@ -31,7 +38,23 @@
                         <th> </th>
                     {% endif %}
                     <th>{{ sortie.organisateur.pseudo }}</th>
-                    <th><a href="{{ path('sortie_detailSortie', {'id': sortie.getId()}) }}">Afficher</a></th>
+                    <th>
+                        {% if app.user %}
+                            {% if sortie.etat.libelle == 'Ouverte'  %}
+                                <a href="{{ path('sortie_detailSortie', {'id': sortie.getId()}) }}">Afficher</a>
+                                {% if app.user in sortie.participants %}
+                                    - <a href="#">Se désister</a>
+                                {% elseif app.user == sortie.organisateur  %}
+                                    - <a href="#">Annuler</a>
+                                {% else %}
+                                    - <a href="#">S'inscrire</a>
+                                {% endif %}
+                            {% elseif sortie.etat.libelle == 'Créée' and app.user == sortie.organisateur %}
+                                <a href="{{ path('sortie_modifierSortie', {'id': sortie.getId()}) }}">Modifier</a>
+                                <a href="#">Publier</a>
+                            {% endif %}
+                        {% endif %}
+                    </th>
                 </tr>
             {% endfor %}
             </tbody>
