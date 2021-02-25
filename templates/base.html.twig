@@ -9,13 +9,28 @@
     <body>
         <header>
             <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-                <a class="navbar-brand" href="#">Navbar</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarColor01">
-                    <ul class="navbar-nav mr-auto">
+                <div class="ml-2 row d-flex align-items-center">
+                    <a class="navbar-brand" href="#">Navbar</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+                <div class="d-flex justify-content-end collapse navbar-collapse">
+                    <ul class="navbar-nav">
+                        {% if app.user and 'ROLE_ADMIN' in app.user.roles %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Villes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Sites</a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('home_home') }}">Accueil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('user_monProfil') }}">Mon Profil</a>
+                        </li>
                         <li class="nav-item">
                             {% if app.user %}
                                 <a class="nav-link" href="{{ url('app_logout') }}">Se deconnecter</a>
@@ -23,18 +38,15 @@
                                 <a class="nav-link" href="{{ url('app_login') }}">Se connecter</a>
                             {% endif %}
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('user_monProfil') }}">Mon Profil</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Pricing</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
-                        </li>
                     </ul>
                 </div>
             </nav>
+            <div class="d-flex flex-column justify-content-end mr-4">
+                <p class="align-self-end">Date du jour: {{ "now"|date("d/m/Y")  }}</p>
+            {% if app.user %}
+                <p class="align-self-end">Connecté: {{  app.user.prenom }} {{ app.user.nom|slice(0, 1) }}.</p>
+            {% endif %}
+            </div>
         </header>
         <div class="container">
         {% block body %}{% endblock %}
