@@ -38,7 +38,6 @@ class SortieController extends AbstractController{
     public function detailSortie(Request $request, EntityManagerInterface $entityManager){
 
         $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
-
         return $this->render("sortie/sortieDetail.html.twig", [
             'sortie'=>$sortie
         ]);

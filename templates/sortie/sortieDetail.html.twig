@@ -70,8 +70,8 @@
         <div>
             <h4>Liste des participants inscrits</h4>
         </div>
-        <div class="overflow-auto mt-5" style="height: 200px;">
-            <table class="table table-hover col-6">
+        <div class="overflow-auto mt-2 col-6 text-left" style="height: 200px;">
+            <table class="table table-hover">
                 <thead>
                 <tr class="table-active">
                     <th scope="row">Pseudo</th>
@@ -79,15 +79,17 @@
                 </tr>
                 </thead>
                 <tbody>
+                {% if sortie.participants %}
                     {% for user in sortie.participants %}
                     <tr class="table-light">
-                            <td >{{ user.pseudo }}</td>
-                            <td >{{ user.nom}}</td>
+                        <td >{{ user.pseudo }}</td>
+                        <td >{{ user.nom}}</td>
                     </tr>
                     {% endfor %}
+                {% endif %}
                 </tbody>
             </table>
         </div>
     </div>
 
-{% endblock %}
+{% endblock%}
