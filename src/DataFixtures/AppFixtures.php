@@ -53,7 +53,6 @@ class AppFixtures extends Fixture
 
         $sorties = $this->createSortie(200,$lieux,$sites,$users,$etats);
         foreach($sorties as $sortie){
-
             $manager->persist($sortie);
         }
 
@@ -219,9 +218,11 @@ class AppFixtures extends Fixture
             $sortie->setOrganisateur($users[$number->numberBetween(0,sizeof($users) -1 )]);
 
             $nbParticipant = $number->numberBetween(1,$sortie->getNbInscriptionMax());
+
             for($j=1; $j <= $nbParticipant; $j++){
-                $sortie->addParticipant($users[$j]);
-                $users[$j]->addSorty($sortie);
+                $user_id= $number->numberBetween(0,sizeof($users) -1);
+                $sortie->addParticipant($users[$user_id]);
+                $users[$user_id]->addSorty($sortie);
             }
 
             $sorties[$i] = $sortie;
