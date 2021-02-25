@@ -56,6 +56,11 @@ Encore
         config.corejs = 3;
     })
 
+    .autoProvideVariables({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery',
+    })
     // enables Sass/SCSS support
     //.enableSassLoader()
 
