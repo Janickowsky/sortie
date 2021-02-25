@@ -55,7 +55,7 @@ class UserType extends AbstractType
             'type' => PasswordType::class,
             'invalid_message' => 'Password non conforme !',
             'options' => ['attr' => ['class' => 'password-field']],
-            'required' => true,
+            'required' => false,
             'first_options'  => ['label' => 'Password :'],
             'second_options' => ['label' => 'Confirmation :'],
         ]);
