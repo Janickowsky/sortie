@@ -51,7 +51,7 @@ class UserType extends AbstractType
             'trim' => true,
         ]);
 
-        $builder->add('password',RepeatedType::class, [
+        $builder->add('plainPassword',RepeatedType::class, [
             'type' => PasswordType::class,
             'invalid_message' => 'Password non conforme !',
             'options' => ['attr' => ['class' => 'password-field']],
@@ -59,7 +59,6 @@ class UserType extends AbstractType
             'first_options'  => ['label' => 'Password :'],
             'second_options' => ['label' => 'Confirmation :'],
         ]);
-
 
         $builder->add('campus',EntityType::class, [
             'label' => 'Site de rattachement :',
