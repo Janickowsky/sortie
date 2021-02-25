@@ -108,14 +108,14 @@ class User implements UserInterface
         $this->sorties = new ArrayCollection();
     }
 
-    public function encorePassword(UserPasswordEncoderInterface $encoder){
+    public function encodePassword(UserPasswordEncoderInterface $encoder){
         return $encoder->encodePassword($this, $this->getPlainPassword());
     }
 
     /**
      * @return mixed
      */
-    public function getPlainPassword()
+    public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }
@@ -123,7 +123,7 @@ class User implements UserInterface
     /**
      * @param mixed $plainPassword
      */
-    public function setPlainPassword($plainPassword): void
+    public function setPlainPassword(?string $plainPassword): void
     {
         $this->plainPassword = $plainPassword;
     }

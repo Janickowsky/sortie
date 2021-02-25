@@ -82,7 +82,7 @@
                 {% if sortie.participants %}
                     {% for user in sortie.participants %}
                     <tr class="table-light">
-                        <td >{{ user.pseudo }}</td>
+                        <td><a href="{{ path('user_detailUser', {'id': user.id}) }}">{{ user.pseudo }}</a></td>
                         <td >{{ user.nom}}</td>
                     </tr>
                     {% endfor %}

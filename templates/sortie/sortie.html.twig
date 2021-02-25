@@ -3,6 +3,13 @@
 {% block title %}Liste des sorties{% endblock %}
 
 {% block body %}
+
+    {% for message in app.flashes('success') %}
+        <div class="d-flex alert alert-success justify-content-center">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     <div class="mt-5 overflow-auto text-left" style="height: 300px;">
         <table class="table table-hover">
             <thead>
@@ -30,8 +37,30 @@
                     {% else %}
                         <th> </th>
                     {% endif %}
-                    <th>{{ sortie.organisateur.pseudo }}</th>
-                    <th><a href="{{ path('sortie_detailSortie', {'id': sortie.getId()}) }}">Afficher</a></th>
+                    {% if app.user and app.user == sortie.organisateur %}
+                        <th><a href="{{ path('user_monProfil') }}">{{ sortie.organisateur.pseudo }}</a></th>
+                    {% else %}
+                        <th><a href="{{ path('user_detailUser', {'id': sortie.organisateur.getId()}) }}">{{ sortie.organisateur.pseudo }}</a></th>
+                    {% endif %}
+                    <th>
+                        {% if app.user %}
+                            {% if sortie.etat.libelle == 'Ouverte'  %}
+                                <a href="{{ path('sortie_detailSortie', {'id': sortie.getId()}) }}">Afficher</a>
+                                {% if app.user in sortie.participants %}
+                                    - <a href="{{ url('sortie_sedesister', {'id': sortie.getId()}) }}">Se désister</a>
+                                {% elseif app.user == sortie.organisateur  %}
+                                    - <a href="#">Annuler</a>
+                                {% elseif sortie.nbInscriptionMax > sortie.participants|length %}
+                                    - <a href="{{ url('sortie_sinscrire', {'id': sortie.getId()}) }}">S'inscrire</a>
+                                {% endif %}
+                            {% elseif sortie.etat.libelle == 'Créée' and app.user == sortie.organisateur %}
+                                <a href="{{ path('sortie_modifierSortie', {'id': sortie.getId()}) }}">Modifier</a>
+                                <a href="#">Publier</a>
+                            {% else %}
+                                <a href="{{ path('sortie_detailSortie', {'id': sortie.getId()}) }}">Afficher</a>
+                            {% endif %}
+                        {% endif %}
+                    </th>
                 </tr>
             {% endfor %}
             </tbody>

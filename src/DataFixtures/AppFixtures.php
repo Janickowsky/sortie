@@ -257,7 +257,7 @@ class AppFixtures extends Fixture
             $user->setPlainPassword('test');
             $user->setCampus($sites[$number->numberBetween(0,sizeof($sites) -1 )]);
 
-            $user->setPassword($this->encoder->encodePassword($user,$user->getPlainPassword()));
+            $user->setPassword($user->encodePassword($this->encoder));
 
             $users[$i] = $user;
         }

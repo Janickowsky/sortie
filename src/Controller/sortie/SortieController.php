@@ -21,13 +21,14 @@ class SortieController extends AbstractController{
 
     const ETAT_OUVERTURE = 'Ouverte';
     const ETAT_CREEE = 'Créée';
+    const ETAT_ENCOURS = 'Activité en cours';
 
     /**
      * @Route(name="listeSorties", path="/sorties", methods={"GET"})
      */
     public function listeSorties(Request $request, EntityManagerInterface $entityManager){
 
-        $sorties = $entityManager->getRepository(Sortie::class)->getAllSortie();
+        $sorties = $entityManager->getRepository(Sortie::class)->getAllSortie($this->getUser());
 
         return $this->render("sortie/sortie.html.twig",["sorties" => $sorties]);
     }
@@ -43,7 +44,7 @@ class SortieController extends AbstractController{
         ]);
     }
     /**
-     * @Route(name="creerSortie", path="/creersorties", methods={"GET", "POST"})
+     * @Route(name="creerSortie", path="/creersortie", methods={"GET", "POST"})
      */
     public function creerSorties(Request $request, EntityManagerInterface $entityManager){
 
@@ -78,12 +79,104 @@ class SortieController extends AbstractController{
 
             $this->addFlash('success',"Votre sortie à bien été ajoutée");
 
-            //TODO rediriger vers le detail de l'annonce
-            return $this->redirectToRoute("home_home");
+            return $this->redirectToRoute('sortie_detailSortie', ['id' => $sortie->getId()]);
         }
 
         return $this->render("sortie/creerSortie.html.twig",["formSortie" => $formSortie->createView()]);
     }
 
+    /**
+     * @Route(name="modifierSortie", path="/modifiersortie-{id}", requirements={"id":"\d+"}, methods={"GET", "POST"})
+     */
+    public function modifierSorties(Request $request, EntityManagerInterface $entityManager){
+        $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
+
+        if($sortie->getOrganisateur() == $this->getUser()) {
+
+            $formSortie = $this->createForm(SortieType::class, $sortie);
+            $formSortie->handleRequest($request);
+
+            if ($formSortie->isSubmitted() && $formSortie->isValid()) {
+                //recuperation de l'utilisateur connecte
+                $user = $this->getUser();
+
+                //l'utilisateur connecte est l'organisateur de la sortie
+                $sortie->setOrganisateur($user);
+
+                //recupere le campus de l'utilissateur connecte
+                $sortie->setCampus($user->getCampus());
+
+                $etat = new Etat();
+                if ($request->request->get('save')) {
+                    $etat = $entityManager->getRepository(Etat::class)->getEtatByLibelle(self::ETAT_CREEE);
+                } elseif ($request->request->get('publish')) {
+                    $etat = $entityManager->getRepository(Etat::class)->getEtatByLibelle(self::ETAT_OUVERTURE);
+                }
+
+                $sortie->setEtat($etat);
+                $entityManager->persist($sortie);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('sortie_detailSortie', ['id' => $sortie->getId()]);
+            }
+
+            return $this->render("sortie/modifierSortie.html.twig", ["formSortie" => $formSortie->createView()]);
+        }else{
+            return $this->redirectToRoute('home_home');
+        }
+    }
+
+    /**
+     * @Route(name="supprimerSortie", path="/supprimersortie-{id}", requirements={"id":"\d+"}, methods={"GET"})
+     */
+    public function supprimerSorties(Request $request, EntityManagerInterface $entityManager){
+        $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
+        if($sortie->getOrganisateur() == $this->getUser()) {
+            $entityManager->remove($sortie);
+            $entityManager->flush();
+
+            $this->addFlash('success', "Votre sortie à bien été supprimée");
+        }
+
+        return  $this->redirectToRoute('home_home');
+    }
+
+    /**
+     * @Route(name="sinscrire", path="/sinscrire-{id}", requirements={"id":"\d+"}, methods={"GET"})
+     */
+    public function sinscrire(Request $request, EntityManagerInterface $entityManager){
+        $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
+
+        if($sortie->getEtat()->getLibelle() == self::ETAT_OUVERTURE && count($sortie->getParticipants()) < $sortie->getNbInscriptionMax()){
+            $sortie->addParticipant($this->getUser());
+            $this->getUser()->addSorty($sortie);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            $this->addFlash('success','Vous avez été bien inscrit à la sortie '.$sortie->getNom());
+        }
+
+        return  $this->redirectToRoute('home_home');
+    }
+
+    /**
+     * @Route(name="sedesister", path="/sedesister-{id}", requirements={"id":"\d+"}, methods={"GET"})
+     */
+    public function sedesister(Request $request, EntityManagerInterface $entityManager){
+        $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
+
+        if($sortie->getEtat()->getLibelle() == self::ETAT_OUVERTURE && in_array($this->getUser(),$sortie->getParticipants()->toArray())){
+
+            $sortie->removeParticipant($this->getUser());
+            $this->getUser()->removeSorty($sortie);
+
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            $this->addFlash('success','Vous avez été bien désinscrit de la sortie '.$sortie->getNom());
+        }
+
+        return  $this->redirectToRoute('home_home');
+    }
 
 }
