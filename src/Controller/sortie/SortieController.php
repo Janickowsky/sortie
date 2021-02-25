@@ -21,13 +21,14 @@ class SortieController extends AbstractController{
 
     const ETAT_OUVERTURE = 'Ouverte';
     const ETAT_CREEE = 'Créée';
+    const ETAT_ENCOURS = 'Activité en cours';
 
     /**
      * @Route(name="listeSorties", path="/sorties", methods={"GET"})
      */
     public function listeSorties(Request $request, EntityManagerInterface $entityManager){
 
-        $sorties = $entityManager->getRepository(Sortie::class)->getAllSortie();
+        $sorties = $entityManager->getRepository(Sortie::class)->getAllSortie($this->getUser());
 
         return $this->render("sortie/sortie.html.twig",["sorties" => $sorties]);
     }
@@ -135,6 +136,45 @@ class SortieController extends AbstractController{
             $entityManager->flush();
 
             $this->addFlash('success', "Votre sortie à bien été supprimée");
+        }
+
+        return  $this->redirectToRoute('home_home');
+    }
+
+    /**
+     * @Route(name="sinscrire", path="/sinscrire-{id}", requirements={"id":"\d+"}, methods={"GET"})
+     */
+    public function sinscrire(Request $request, EntityManagerInterface $entityManager){
+        $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
+
+        //TODO voir date => etat en cours
+        if(count($sortie->getParticipants()) < $sortie->getNbInscriptionMax()){
+            $sortie->addParticipant($this->getUser());
+            $this->getUser()->addSorty($sortie);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            $this->addFlash('success','Vous avez été bien inscrit à la sortie '.$sortie->getNom());
+        }
+
+        return  $this->redirectToRoute('home_home');
+    }
+
+    /**
+     * @Route(name="sedesister", path="/sedesister-{id}", requirements={"id":"\d+"}, methods={"GET"})
+     */
+    public function sedesister(Request $request, EntityManagerInterface $entityManager){
+        $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
+
+        if($sortie->getEtat()->getLibelle() == self::ETAT_OUVERTURE && in_array($this->getUser(),$sortie->getParticipants()->toArray())){
+
+            $sortie->removeParticipant($this->getUser());
+            $this->getUser()->removeSorty($sortie);
+
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            $this->addFlash('success','Vous avez été bien désinscrit de la sortie '.$sortie->getNom());
         }
 
         return  $this->redirectToRoute('home_home');

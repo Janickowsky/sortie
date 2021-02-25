@@ -47,15 +47,17 @@
                             {% if sortie.etat.libelle == 'Ouverte'  %}
                                 <a href="{{ path('sortie_detailSortie', {'id': sortie.getId()}) }}">Afficher</a>
                                 {% if app.user in sortie.participants %}
-                                    - <a href="#">Se désister</a>
+                                    - <a href="{{ url('sortie_sedesister', {'id': sortie.getId()}) }}">Se désister</a>
                                 {% elseif app.user == sortie.organisateur  %}
                                     - <a href="#">Annuler</a>
-                                {% else %}
-                                    - <a href="#">S'inscrire</a>
+                                {% elseif sortie.nbInscriptionMax > sortie.participants|length %}
+                                    - <a href="{{ url('sortie_sinscrire', {'id': sortie.getId()}) }}">S'inscrire</a>
                                 {% endif %}
                             {% elseif sortie.etat.libelle == 'Créée' and app.user == sortie.organisateur %}
                                 <a href="{{ path('sortie_modifierSortie', {'id': sortie.getId()}) }}">Modifier</a>
                                 <a href="#">Publier</a>
+                            {% else %}
+                                <a href="{{ path('sortie_detailSortie', {'id': sortie.getId()}) }}">Afficher</a>
                             {% endif %}
                         {% endif %}
                     </th>

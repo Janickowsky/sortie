@@ -19,11 +19,12 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
-    public function getAllSortie(){
+    public function getAllSortie($user){
         $req = $this->createQueryBuilder('sortie')
             ->innerJoin('sortie.etat', 'etat')->addSelect('etat')
             ->where("etat.libelle = 'Ouverte'")
-            ->orWhere("etat.libelle = 'Créée'")
+            ->orWhere("sortie.organisateur = :user")
+            ->setParameter('user',$user)
             ->orderBy('sortie.dateHeureDebut', 'desc');
 
         return $req->getQuery()->getResult();
