@@ -43,7 +43,7 @@ class SortieController extends AbstractController{
         ]);
     }
     /**
-     * @Route(name="creerSortie", path="/creersorties", methods={"GET", "POST"})
+     * @Route(name="creerSortie", path="/creersortie", methods={"GET", "POST"})
      */
     public function creerSorties(Request $request, EntityManagerInterface $entityManager){
 
@@ -85,52 +85,59 @@ class SortieController extends AbstractController{
     }
 
     /**
-     * @Route(name="modifierSortie", path="/modifiersorties-{id}", requirements={"id":"\d+"}, methods={"GET", "POST"})
+     * @Route(name="modifierSortie", path="/modifiersortie-{id}", requirements={"id":"\d+"}, methods={"GET", "POST"})
      */
     public function modifierSorties(Request $request, EntityManagerInterface $entityManager){
         $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
 
-        $formSortie = $this->createForm(SortieType::class, $sortie);
-        $formSortie->handleRequest($request);
+        if($sortie->getOrganisateur() == $this->getUser()) {
 
-        if($formSortie->isSubmitted() && $formSortie->isValid()) {
-            //recuperation de l'utilisateur connecte
-            $user = $this->getUser();
+            $formSortie = $this->createForm(SortieType::class, $sortie);
+            $formSortie->handleRequest($request);
 
-            //l'utilisateur connecte est l'organisateur de la sortie
-            $sortie->setOrganisateur($user);
+            if ($formSortie->isSubmitted() && $formSortie->isValid()) {
+                //recuperation de l'utilisateur connecte
+                $user = $this->getUser();
 
-            //recupere le campus de l'utilissateur connecte
-            $sortie->setCampus($user->getCampus());
+                //l'utilisateur connecte est l'organisateur de la sortie
+                $sortie->setOrganisateur($user);
 
-            $etat = new Etat();
-            if ($request->request->get('save')) {
-                $etat = $entityManager->getRepository(Etat::class)->getEtatByLibelle(self::ETAT_CREEE);
-            }elseif($request->request->get('publish')){
-                $etat = $entityManager->getRepository(Etat::class)->getEtatByLibelle(self::ETAT_OUVERTURE);
+                //recupere le campus de l'utilissateur connecte
+                $sortie->setCampus($user->getCampus());
+
+                $etat = new Etat();
+                if ($request->request->get('save')) {
+                    $etat = $entityManager->getRepository(Etat::class)->getEtatByLibelle(self::ETAT_CREEE);
+                } elseif ($request->request->get('publish')) {
+                    $etat = $entityManager->getRepository(Etat::class)->getEtatByLibelle(self::ETAT_OUVERTURE);
+                }
+
+                $sortie->setEtat($etat);
+                $entityManager->persist($sortie);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('sortie_detailSortie', ['id' => $sortie->getId()]);
             }
 
-            $sortie->setEtat($etat);
-            $entityManager->persist($sortie);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('sortie_detailSortie', ['id' => $sortie->getId()]);
+            return $this->render("sortie/modifierSortie.html.twig", ["formSortie" => $formSortie->createView()]);
+        }else{
+            return $this->redirectToRoute('home_home');
         }
-
-        return $this->render("sortie/modifierSortie.html.twig",["formSortie" => $formSortie->createView()]);
     }
 
     /**
-     * @Route(name="supprimerSortie", path="/supprimerrsorties-{id}", requirements={"id":"\d+"}, methods={"GET"})
+     * @Route(name="supprimerSortie", path="/supprimersortie-{id}", requirements={"id":"\d+"}, methods={"GET"})
      */
     public function supprimerSorties(Request $request, EntityManagerInterface $entityManager){
         $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
-        $entityManager->remove($sortie);
-        $entityManager->flush();
+        if($sortie->getOrganisateur() == $this->getUser()) {
+            $entityManager->remove($sortie);
+            $entityManager->flush();
 
-        $this->addFlash('success',"Votre sortie à bien été supprimée");
+            $this->addFlash('success', "Votre sortie à bien été supprimée");
+        }
 
-       return  $this->redirectToRoute('home_home');
+        return  $this->redirectToRoute('home_home');
     }
 
 }

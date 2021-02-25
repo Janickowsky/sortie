@@ -37,7 +37,11 @@
                     {% else %}
                         <th> </th>
                     {% endif %}
-                    <th>{{ sortie.organisateur.pseudo }}</th>
+                    {% if app.user and app.user == sortie.organisateur %}
+                        <th><a href="{{ path('user_monProfil') }}">{{ sortie.organisateur.pseudo }}</a></th>
+                    {% else %}
+                        <th><a href="{{ path('user_detailUser', {'id': sortie.organisateur.getId()}) }}">{{ sortie.organisateur.pseudo }}</a></th>
+                    {% endif %}
                     <th>
                         {% if app.user %}
                             {% if sortie.etat.libelle == 'Ouverte'  %}
