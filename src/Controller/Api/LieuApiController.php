@@ -18,9 +18,8 @@ class LieuApiController extends AbstractController
     public function list(LieuRepository $lr, SerializerInterface $serializer, Request $request) :Response{
         $lieu = $lr->getLieuByIdVille($request->get('id'));
         $json = $serializer->serialize($lieu, 'json', ['groups'=>['api_lieu']]);
-        dump($json);
-        exit();
-        //return new JsonResponse($json, 200, [], true);
+
+        return new JsonResponse($json, 200, [], true);
 
     }
 }
