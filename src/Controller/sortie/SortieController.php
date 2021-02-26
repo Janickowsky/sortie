@@ -6,7 +6,8 @@ namespace App\Controller\sortie;
 
 use App\Entity\Etat;
 use App\Entity\Sortie;
-use App\Entity\User;
+use App\Form\SortieSearchType;
+use App\Form\SortieAnnulerType;
 use App\Form\SortieType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,15 +23,40 @@ class SortieController extends AbstractController{
     const ETAT_OUVERTURE = 'Ouverte';
     const ETAT_CREEE = 'Créée';
     const ETAT_ENCOURS = 'Activité en cours';
+    const ETAT_ANNULEE = 'Annulée';
 
     /**
-     * @Route(name="listeSorties", path="/sorties", methods={"GET"})
+     * @Route(name="listeSorties", path="/sorties", methods={"GET","POST"})
      */
     public function listeSorties(Request $request, EntityManagerInterface $entityManager){
 
-        $sorties = $entityManager->getRepository(Sortie::class)->getAllSortie($this->getUser());
+        $formSearch = $this->createForm(SortieSearchType::class);
 
-        return $this->render("sortie/sortie.html.twig",["sorties" => $sorties]);
+        $formSearch->handleRequest($request);
+
+        if($formSearch->isSubmitted() && $formSearch->isValid()){
+            $site = $formSearch->get('site')->getData();
+            $nomSortie = $formSearch->get('nomSortie')->getData();
+            $orgaTri = $formSearch->get('orgaTri')->getData();
+            $inscritTri = $formSearch->get('inscritTri')->getData();
+            $nonInscritTri = $formSearch->get('nonInscritTri')->getData();
+            $passeTri = $formSearch->get('passeTri')->getData();
+
+            $sorties= $entityManager->getRepository(Sortie::class)->getSortieSearch(
+                $this->getUser(),
+                $site ?? null,
+                $nomSortie ?? null,
+                $orgaTri ?? null,
+                $inscritTri ?? null,
+                $nonInscritTri ?? null,
+                $passeTri ?? null
+            );
+        }else{
+            $sorties = $entityManager->getRepository(Sortie::class)->getAllSortie($this->getUser());
+        }
+
+
+        return $this->render("sortie/sortie.html.twig",["sorties" => $sorties,"formSearch" =>$formSearch->createView()]);
     }
 
     /**
@@ -39,6 +65,11 @@ class SortieController extends AbstractController{
     public function detailSortie(Request $request, EntityManagerInterface $entityManager){
 
         $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
+        if($sortie->getEtat()->getLibelle() == self::ETAT_ANNULEE){
+            $sortie->setInfosSortie($sortie->getInfosSortie() . "\nMotif d'annualation : " .$sortie->getMotif());
+        }
+
+
         return $this->render("sortie/sortieDetail.html.twig", [
             'sortie'=>$sortie
         ]);
@@ -179,4 +210,35 @@ class SortieController extends AbstractController{
         return  $this->redirectToRoute('home_home');
     }
 
+    /**
+     * @Route(name="annulerSortie", path="/annulersortie-{id}", requirements={"id":"\d+"}, methods={"GET", "POST"})
+     */
+    public function annulerSortie(Request $request, EntityManagerInterface $entityManager){
+        $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
+
+        if($sortie->getOrganisateur() == $this->getUser()) {
+
+        $formAnnuler = $this->createForm(SortieAnnulerType::class);
+        $formAnnuler->handleRequest($request);
+        if ($formAnnuler->isSubmitted() && $formAnnuler->isValid()){
+            $sortie->setMotif($formAnnuler->get('motif')->getData());
+            $etat = $entityManager->getRepository(Etat::class)->getEtatByLibelle(self::ETAT_ANNULEE);
+            $sortie->setEtat($etat);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+            $this->addFlash('success', 'Votre sortie a bien été annulée');
+
+            return $this->redirectToRoute('home_home');
+        }
+
+
+
+        return $this->render("sortie/annulerSortie.html.twig", [
+            'sortie'=>$sortie,
+            'formAnnuler'=>$formAnnuler->createView()
+        ]);
+        }else{
+            return $this->redirectToRoute('home_home');
+        }
+    }
 }

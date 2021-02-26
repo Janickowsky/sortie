@@ -105,6 +105,13 @@ class Sortie
      */
     private $participants;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Assert\Type("string")
+     * @Assert\NotBlank(message="Veuillez saisir un motif!")
+     */
+    private $motif;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
@@ -255,6 +262,18 @@ class Sortie
     public function removeParticipant(User $participant): self
     {
         $this->participants->removeElement($participant);
+
+        return $this;
+    }
+
+    public function getMotif(): ?string
+    {
+        return $this->motif;
+    }
+
+    public function setMotif(?string $motif): self
+    {
+        $this->motif = $motif;
 
         return $this;
     }
