@@ -107,6 +107,8 @@ class Sortie
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\Type("string")
+     * @Assert\NotBlank(message="Veuillez saisir un motif!")
      */
     private $motif;
 
