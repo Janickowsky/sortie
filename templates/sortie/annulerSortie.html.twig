@@ -3,5 +3,48 @@
 {% block title %}Annuler une sortie{% endblock %}
 
 {% block body %}
-    <h1>Bienvenu</h1>
+
+    {% form_theme formAnnuler 'bootstrap_4_layout.html.twig' %}
+
+    <div class="d-flex justify-content-center">
+        <h1>Afficher une sortie</h1>
+    </div>
+    <div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Nom de la sortie</label>
+            <p class="form-control" id="nom">{{sortie.nom}}</p>
+        </div>
+
+        <div class="form-group">
+            <label for="exampleInputEmail1">Date et heure de la sortie</label>
+            <p class="form-control" id="date_sortie">{{ sortie.dateHeureDebut|format_datetime('short', 'short', locale='fr')}}</p>
+        </div>
+
+        <div class="form-group">
+            <label for="exampleInputEmail1">Site organisateur</label>
+            <p class="form-control" id="rue">{{ sortie.campus.nom}}</p>
+        </div>
+
+        <div class="form-group">
+            <label for="exampleInputEmail1">Lieu</label>
+            <p class="form-control" id="lieu">{{ sortie.lieu.nom}} {{ sortie.lieu.ville.codePostal}} {{ sortie.lieu.ville.nom}}</p>
+        </div>
+
+        {{ form_start(formAnnuler)}}
+
+        <div class="form-group">
+            {{ form_label(formAnnuler.motif) }}
+            {{ form_widget(formAnnuler.motif) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_widget(formAnnuler.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+            <button class="btn btn-primary" type="button"><a href="{{ url('home_home') }}">Annuler</a></button>
+        </div>
+
+        {{ form_end(formAnnuler) }}
+
+
+    </div>
+
 {% endblock %}

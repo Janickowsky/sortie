@@ -6,7 +6,12 @@ namespace App\Controller\sortie;
 
 use App\Entity\Etat;
 use App\Entity\Sortie;
+<<<<<<< HEAD
 use App\Form\SortieSearchType;
+=======
+use App\Entity\User;
+use App\Form\SortieAnnulerType;
+>>>>>>> ANNULER SORTIE
 use App\Form\SortieType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,6 +27,7 @@ class SortieController extends AbstractController{
     const ETAT_OUVERTURE = 'Ouverte';
     const ETAT_CREEE = 'Créée';
     const ETAT_ENCOURS = 'Activité en cours';
+    const ETAT_ANNULEE = 'Annulée';
 
     /**
      * @Route(name="listeSorties", path="/sorties", methods={"GET","POST"})
@@ -190,10 +196,25 @@ class SortieController extends AbstractController{
     }
 
     /**
-     *
+     * @Route(name="annulerSortie", path="/annulersortie-{id}", requirements={"id":"\d+"}, methods={"GET", "POST"})
      */
-    public function annulerSortie(){
+    public function annulerSortie(Request $request, EntityManagerInterface $entityManager){
+        $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
 
-        return $this->render("sortie/annulerSortie.html.twig");
+        $formAnnuler = $this->createForm(SortieAnnulerType::class);
+        $formAnnuler->handleRequest($request);
+        if ($formAnnuler->isSubmitted() && $formAnnuler->isValid()){
+            $sortie->setMotif($formAnnuler->get('motif')->getData());
+            $etat = $entityManager->getRepository(Etat::class)->getEtatByLibelle(self::ETAT_ANNULEE);
+            $sortie->setEtat($etat);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+            $this->addFlash('success', 'Votre sortie a bien été annulée');
+            return $this->redirectToRoute('home_home');
+        }
+        return $this->render("sortie/annulerSortie.html.twig", [
+            'sortie'=>$sortie,
+            'formAnnuler'=>$formAnnuler->createView()
+        ]);
     }
 }
