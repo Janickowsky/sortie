@@ -17,6 +17,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Blank;
 
@@ -93,6 +95,14 @@ class SortieType extends AbstractType
             'multiple' => false,
             'placeholder' => 'Choisir un lieu',
         ]);
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
+            $sortie = $event->getData();
+            $form = $event->getForm();
+            if($sortie->getLieu() != null){
+                $form->get('ville')->setData($sortie->getLieu()->getVille());
+            }
+
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)
