@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Site;
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -39,5 +40,21 @@ class SortieRepository extends ServiceEntityRepository
             ->setParameter('id', $id);
 
         return $req->getQuery()->getSingleResult();
+    }
+
+    public function getSortieSearch($user, ?Site $site = null){
+        $req = $this->createQueryBuilder('sortie')
+            ->innerJoin('sortie.etat', 'etat')->addSelect('etat')
+            ->innerJoin('sortie.campus', 'site')->addSelect('site')
+            ->where("etat.libelle = 'Ouverte'")
+            ->orWhere("sortie.organisateur = :user")
+            ->setParameter('user',$user)
+            ->orderBy('sortie.dateHeureDebut', 'desc');
+
+        if(!is_null($site)){
+            $req->andWhere('site.id = :idSite')->setParameter('idSite', $site);
+        }
+
+        return $req->getQuery()->getResult();
     }
 }

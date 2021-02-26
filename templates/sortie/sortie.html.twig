@@ -10,6 +10,13 @@
         </div>
     {% endfor %}
 
+    {{ form_start(formSearch, {'attr': {'class': 'd-flex justify-content-center mt-4'}}) }}
+    <div class="d-flex flex-row form-group">
+        {{ form_widget(formSearch.site, {'attr': {'class': 'form-control mr-4'}}) }}
+        {{ form_widget(formSearch.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+    </div>
+    {{ form_end(formSearch) }}
+
     <div class="mt-5 overflow-auto text-left" style="height: 300px;">
         <table class="table table-hover">
             <thead>
@@ -49,7 +56,7 @@
                                 {% if app.user in sortie.participants %}
                                     - <a href="{{ url('sortie_sedesister', {'id': sortie.getId()}) }}">Se désister</a>
                                 {% elseif app.user == sortie.organisateur  %}
-                                    - <a href="#">Annuler</a>
+                                    - <a href="{{ path('sortie_annulerSortie',{'id': sortie.getId()}) }}">Annuler</a>
                                 {% elseif sortie.nbInscriptionMax > sortie.participants|length %}
                                     - <a href="{{ url('sortie_sinscrire', {'id': sortie.getId()}) }}">S'inscrire</a>
                                 {% endif %}

@@ -6,7 +6,7 @@ namespace App\Controller\sortie;
 
 use App\Entity\Etat;
 use App\Entity\Sortie;
-use App\Entity\User;
+use App\Form\SortieSearchType;
 use App\Form\SortieType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,13 +24,23 @@ class SortieController extends AbstractController{
     const ETAT_ENCOURS = 'Activité en cours';
 
     /**
-     * @Route(name="listeSorties", path="/sorties", methods={"GET"})
+     * @Route(name="listeSorties", path="/sorties", methods={"GET","POST"})
      */
     public function listeSorties(Request $request, EntityManagerInterface $entityManager){
 
-        $sorties = $entityManager->getRepository(Sortie::class)->getAllSortie($this->getUser());
+        $formSearch = $this->createForm(SortieSearchType::class);
 
-        return $this->render("sortie/sortie.html.twig",["sorties" => $sorties]);
+        $formSearch->handleRequest($request);
+
+        if($formSearch->isSubmitted() && $formSearch->isValid()){
+            $site = $formSearch->get('site')->getData();
+            $sorties= $entityManager->getRepository(Sortie::class)->getSortieSearch($this->getUser(),$site ?? null);
+        }else{
+            $sorties = $entityManager->getRepository(Sortie::class)->getAllSortie($this->getUser());
+        }
+
+
+        return $this->render("sortie/sortie.html.twig",["sorties" => $sorties,"formSearch" =>$formSearch->createView()]);
     }
 
     /**
