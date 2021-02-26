@@ -6,12 +6,8 @@ namespace App\Controller\sortie;
 
 use App\Entity\Etat;
 use App\Entity\Sortie;
-<<<<<<< HEAD
 use App\Form\SortieSearchType;
-=======
-use App\Entity\User;
 use App\Form\SortieAnnulerType;
->>>>>>> ANNULER SORTIE
 use App\Form\SortieType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
