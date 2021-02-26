@@ -179,4 +179,11 @@ class SortieController extends AbstractController{
         return  $this->redirectToRoute('home_home');
     }
 
+    /**
+     *
+     */
+    public function annulerSortie(){
+
+        return $this->render("sortie/annulerSortie.html.twig");
+    }
 }
