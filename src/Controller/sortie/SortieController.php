@@ -36,7 +36,21 @@ class SortieController extends AbstractController{
 
         if($formSearch->isSubmitted() && $formSearch->isValid()){
             $site = $formSearch->get('site')->getData();
-            $sorties= $entityManager->getRepository(Sortie::class)->getSortieSearch($this->getUser(),$site ?? null);
+            $nomSortie = $formSearch->get('nomSortie')->getData();
+            $orgaTri = $formSearch->get('orgaTri')->getData();
+            $inscritTri = $formSearch->get('inscritTri')->getData();
+            $nonInscritTri = $formSearch->get('nonInscritTri')->getData();
+            $passeTri = $formSearch->get('passeTri')->getData();
+
+            $sorties= $entityManager->getRepository(Sortie::class)->getSortieSearch(
+                $this->getUser(),
+                $site ?? null,
+                $nomSortie ?? null,
+                $orgaTri ?? null,
+                $inscritTri ?? null,
+                $nonInscritTri ?? null,
+                $passeTri ?? null
+            );
         }else{
             $sorties = $entityManager->getRepository(Sortie::class)->getAllSortie($this->getUser());
         }

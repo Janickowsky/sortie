@@ -10,13 +10,36 @@
         </div>
     {% endfor %}
 
-    {{ form_start(formSearch, {'attr': {'class': 'd-flex justify-content-center mt-4'}}) }}
-    <div class="d-flex flex-row form-group">
-        {{ form_widget(formSearch.site, {'attr': {'class': 'form-control mr-4'}}) }}
-        {{ form_widget(formSearch.submit, {'attr': {'class': 'btn btn-primary'}}) }}
-    </div>
-    {{ form_end(formSearch) }}
+        {{ form_start(formSearch) }}
+        <div class="form-group">
+            {{ form_label(formSearch.site) }}
+            {{ form_widget(formSearch.site, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(formSearch.nomSortie) }}
+            {{ form_widget(formSearch.nomSortie, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(formSearch.orgaTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
+            {{ form_widget(formSearch.orgaTri, {'attr': {'class': 'form-check'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(formSearch.inscritTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
+            {{ form_widget(formSearch.inscritTri, {'attr': {'class': 'form-check'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(formSearch.nonInscritTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
+            {{ form_widget(formSearch.nonInscritTri, {'attr': {'class': 'form-check'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(formSearch.passeTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
+            {{ form_widget(formSearch.passeTri, {'attr': {'class': 'form-check'}}) }}
+        </div>
 
+        <div class="form-group">
+            {{ form_widget(formSearch.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+        </div>
+        {{ form_end(formSearch) }}
     <div class="mt-5 overflow-auto text-left" style="height: 300px;">
         <table class="table table-hover">
             <thead>
@@ -62,7 +85,7 @@
                                 {% endif %}
                             {% elseif sortie.etat.libelle == 'Créée' and app.user == sortie.organisateur %}
                                 <a href="{{ path('sortie_modifierSortie', {'id': sortie.getId()}) }}">Modifier</a>
-                                <a href="#">Publier</a>
+                                - <a href="#">Publier</a>
                             {% else %}
                                 <a href="{{ path('sortie_detailSortie', {'id': sortie.getId()}) }}">Afficher</a>
                             {% endif %}
