@@ -3,40 +3,43 @@
 {% block body %}
 
     <div class="d-flex justify-content-center">
-        <h1>Gérer les lieux</h1>
+        <h1>Gérer les sites</h1>
     </div>
 
+    <div class="d-flex">
+        <h4>Filtrer les sites</h4>
+    </div>
 
-
+    <div class="d-flex justify-content">
+        <div class="form-group col-6">
+            <label for="fld-name">Le nom contient :</label>
+            <p class="form-control" id="nom">{{ "" }}</p>
+        </div>
+        <div>
+            <button class="btn btn-primary" >
+                <a style="color: white">Rechercher</a>
+            </button>
+        </div>
+    </div>
     <div class="mt-5 overflow-auto text-left" style="height: 300px;">
         <table class="table table-hover">
             <thead>
             <tr class="table-active">
                 <th scope="col">Ville</th>
-                <th scope="col">nom</th>
-                <th scope="col">rue</th>
-                <th scope="col">latitude</th>
-                <th scope="col">longitude</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
             <tbody>
-            {% for lieu in lieux %}
+            {% for site in sites %}
                 <tr class="table-light">
-                    <th>{{ lieu.ville.nom }}</th>
-                    <th>{{ lieu.nom }}</th>
-                    <th>{{ lieu.rue }}</th>
-                    <th>{{ lieu.latitude}}</th>
-                    <th>{{ lieu.longitude }}</th>
+                    <th>{{ site.nom }}</th>
                     <th>Modifier - Supprimer</th>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
-    <tbody>
 
-    </tbody>
     <button class="btn btn-primary" >
         <a href="{{ path('home_home') }}" style="color: white">Ajouter</a>
     </button>

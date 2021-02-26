@@ -45,6 +45,9 @@
     <div class="form-group">
         {{ form_label(formSortie.lieu) }}
         {{ form_widget(formSortie.lieu, {'attr': {'class': 'form-control'}}) }}
+        <button class="btn btn-primary" >
+            <a href="{{ path('lieu_listeLieux') }}" style="color: white">+</a>
+        </button>
     </div>
 
     <div class="form-group d-flex justify-content-center">

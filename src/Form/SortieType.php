@@ -93,6 +93,8 @@ class SortieType extends AbstractType
             'multiple' => false,
             'placeholder' => 'Choisir un lieu',
         ]);
+
+
     }
 
     public function configureOptions(OptionsResolver $resolver)

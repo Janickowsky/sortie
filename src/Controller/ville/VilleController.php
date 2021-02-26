@@ -4,12 +4,8 @@
 namespace App\Controller\ville;
 
 
-use App\Entity\Etat;
-use App\Entity\Lieu;
-use App\Entity\Sortie;
-use App\Entity\User;
+
 use App\Entity\Ville;
-use App\Form\SortieType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

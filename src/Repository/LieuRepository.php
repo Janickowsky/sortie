@@ -32,6 +32,14 @@ class LieuRepository extends ServiceEntityRepository
 
         return $req->getQuery()->getResult();
     }
+
+
+    public function getAllLieu()
+    {
+        $req = $this->createQueryBuilder('lieu');
+
+        return $req->getQuery()->getResult();
+    }
     // /**
     //  * @return Lieu[] Returns an array of Lieu objects
     //  */

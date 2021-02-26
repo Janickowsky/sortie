@@ -19,6 +19,11 @@ class SiteRepository extends ServiceEntityRepository
         parent::__construct($registry, Site::class);
     }
 
+    public function getAllSite(){
+        $req = $this->createQueryBuilder('site');
+
+        return $req->getQuery()->getResult();
+    }
     // /**
     //  * @return Site[] Returns an array of Site objects
     //  */

@@ -4,11 +4,9 @@
 namespace App\Controller\lieu;
 
 
-use App\Entity\Etat;
+
 use App\Entity\Lieu;
-use App\Entity\Sortie;
-use App\Entity\User;
-use App\Form\SortieType;
+use App\Form\LieuType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,15 +18,46 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class LieuController extends AbstractController{
 
+    /**
+     * @Route(name="creerlieu", path="/creerLieu", methods={"GET", "POST"})
+     */
+
+    public function lieuForm(Request $request, EntityManagerInterface $em){
+
+        // Initialiser l'objet mappé au formulaire
+        $lieu = new Lieu();
+
+        // Création du formulaire
+        $form = $this->createForm(LieuType::class, $lieu);
+
+        // Récupération des données de la requête HTTP (Navigateur) au formulaire
+        $form->handleRequest($request);
+
+        // Vérification de la soumission du formulaire
+        if($form->isSubmitted() && $form->isValid()) {
+
+            // Insertion de l'objet en BDD
+            $em->persist($lieu);
+            // Validation de la transaction
+            $em->flush();
+
+            // Redirection sur la page "Gérer les lieux"
+            return $this->redirectToRoute('lieu_lieu');
+        }
+
+        // Appel à la vue pour afficher le formulaire
+        return $this->render('lieu/lieu.html.twig', ['LieuType' => $form->createView()]);
+    }
+
 
     /**
      * @Route(name="listeLieux", path="/lieu", methods={"GET"})
      */
     public function listeLieux(Request $request, EntityManagerInterface $entityManager){
 
+        $lieux = $entityManager->getRepository(Lieu::class)->getAllLieu();
 
-
-        return $this->render("lieu/lieu.html.twig");
+        return $this->render("lieu/lieu.html.twig",["lieux"=> $lieux]);
     }
 
 

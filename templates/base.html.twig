@@ -20,10 +20,10 @@
                     <ul class="navbar-nav">
                         {% if app.user and 'ROLE_ADMIN' in app.user.roles %}
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Villes</a>
+                                <a class="nav-link" href="{{ path('ville_listeVille') }}">Villes</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Sites</a>
+                                <a class="nav-link" href="{{ path('site_listeSite') }}">Sites</a>
                             </li>
                         {% endif %}
                         <li class="nav-item">
