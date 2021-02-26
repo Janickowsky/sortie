@@ -65,6 +65,11 @@ class SortieController extends AbstractController{
     public function detailSortie(Request $request, EntityManagerInterface $entityManager){
 
         $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
+        if($sortie->getEtat()->getLibelle() == self::ETAT_ANNULEE){
+            $sortie->setInfosSortie($sortie->getInfosSortie() . "\nMotif d'annualation : " .$sortie->getMotif());
+        }
+
+
         return $this->render("sortie/sortieDetail.html.twig", [
             'sortie'=>$sortie
         ]);
@@ -211,6 +216,8 @@ class SortieController extends AbstractController{
     public function annulerSortie(Request $request, EntityManagerInterface $entityManager){
         $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
 
+        if($sortie->getOrganisateur() == $this->getUser()) {
+
         $formAnnuler = $this->createForm(SortieAnnulerType::class);
         $formAnnuler->handleRequest($request);
         if ($formAnnuler->isSubmitted() && $formAnnuler->isValid()){
@@ -220,11 +227,18 @@ class SortieController extends AbstractController{
             $entityManager->persist($sortie);
             $entityManager->flush();
             $this->addFlash('success', 'Votre sortie a bien été annulée');
+
             return $this->redirectToRoute('home_home');
         }
+
+
+
         return $this->render("sortie/annulerSortie.html.twig", [
             'sortie'=>$sortie,
             'formAnnuler'=>$formAnnuler->createView()
         ]);
+        }else{
+            return $this->redirectToRoute('home_home');
+        }
     }
 }

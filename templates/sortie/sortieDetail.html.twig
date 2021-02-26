@@ -7,68 +7,76 @@
     <div class="d-flex justify-content-center">
         <h1>Afficher une sortie</h1>
     </div>
+    <div class="d-flex justify-content-center">
+        {% if sortie.etat.libelle == 'Annulée'  %}
+            <h4 class="text-danger mb-4">Sortie Annulée</h4>
+        {% endif %}
+    </div>
+
     <div class="d-flex flex-wrap">
         <div class="form-group col-6">
-            <label for="exampleInputEmail1">Nom de la sortie</label>
+            <label for="nom">Nom de la sortie</label>
             <p class="form-control" id="nom">{{ sortie.nom}}</p>
         </div>
         <div class="form-group col-6">
-            <label for="exampleInputEmail1">Lieu</label>
+            <label for="lieu">Lieu</label>
             <p class="form-control" id="lieu">{{ sortie.lieu.nom}}</p>
         </div>
 
         <div class="form-group col-6">
-            <label for="exampleInputEmail1">Date et heure de la sortie</label>
+            <label for="date_sortie">Date et heure de la sortie</label>
             <p class="form-control" id="date_sortie">{{ sortie.dateHeureDebut|format_datetime('short', 'short', locale='fr')}}</p>
         </div>
 
         <div class="form-group col-6">
-            <label for="exampleInputEmail1">Rue</label>
-            <p class="form-control" id="rue">{{ sortie.lieu.nom}}</p>
+            <label for="rue">Rue</label>
+            <p class="form-control" id="rue">{{ sortie.lieu.rue}}</p>
         </div>
 
         <div class="form-group col-6">
-            <label for="exampleInputEmail1">Date limite d'inscription</label>
+            <label for="date_limite">Date limite d'inscription</label>
             <p class="form-control" id="date_limite">{{ sortie.dateLimiteInscription|format_datetime('short', 'none', locale='fr') }}</p>
         </div>
 
         <div class="form-group col-6">
-            <label for="exampleInputEmail1">Ville</label>
+            <label for="ville">Ville</label>
             <p class="form-control" id="ville">{{ sortie.lieu.ville.nom}}</p>
         </div>
 
         <div class="form-group col-6">
-            <label for="exampleInputEmail1">Nombre de place</label>
+            <label for="nbPlace">Nombre de place</label>
             <p class="form-control" id="nbPlace">{{ sortie.nbInscriptionMax }} places</p>
         </div>
 
         <div class="form-group col-6">
-            <label for="exampleInputEmail1">Code Postal</label>
+            <label for="cp">Code Postal</label>
             <p class="form-control" id="cp">{{ sortie.lieu.ville.codePostal }}</p>
         </div>
 
 
         <div class="form-group col-6">
-            <label for="exampleInputEmail1">Durée</label>
+            <label for="duree">Durée</label>
             <p class="form-control" id="duree">{{ sortie.duree }} heures</p>
         </div>
 
         <div class="form-group col-6">
-            <label for="exampleInputEmail1">Latitude</label>
+            <label for="nbPlace">Latitude</label>
             <p class="form-control" id="nbPlace">{{ sortie.lieu.latitude }}</p>
         </div>
 
         <div class="form-group col-6">
-            <label for="exampleInputEmail1">Description et informations</label>
-            <p class="form-control" id="description">{{ sortie.infosSortie }}</p>
+            <label for="description">Description et informations</label>
+            <textarea readonly class="form-control" id="description">{{ sortie.infosSortie}}</textarea>
         </div>
+
         <div class="form-group col-6">
-            <label for="exampleInputEmail1">Longitude</label>
+            <label for="nbPlace">Longitude</label>
             <p class="form-control" id="nbPlace">{{ sortie.lieu.longitude}}</p>
         </div>
     </div>
 
     <div>
+
         <div>
             <h4>Liste des participants inscrits</h4>
         </div>
