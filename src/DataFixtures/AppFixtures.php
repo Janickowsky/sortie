@@ -96,16 +96,16 @@ class AppFixtures extends Fixture
         $etat2->setLibelle('Ouverte');
 
         $etat3 = new Etat();
-        $etat3->setLibelle('Clôturée');
+        $etat3->setLibelle('Activité en cours');
 
         $etat4 = new Etat();
-        $etat4->setLibelle('Activité en cours');
+        $etat4->setLibelle('Passée');
 
         $etat5 = new Etat();
-        $etat5->setLibelle('Passée');
+        $etat5->setLibelle('Annulée');
 
         $etat6 = new Etat();
-        $etat6->setLibelle('Annulée');
+        $etat6->setLibelle('Clôturée');
 
         $etats[0] = $etat1;
         $etats[1] = $etat2;
@@ -113,7 +113,6 @@ class AppFixtures extends Fixture
         $etats[3] = $etat4;
         $etats[4] = $etat5;
         $etats[5] = $etat6;
-
         return $etats;
     }
 
@@ -208,9 +207,16 @@ class AppFixtures extends Fixture
 
             $sortie->setNom($lorem->word());
             $sortie->setDateHeureDebut($datt->dateTimeThisYear($max = '2021-12-31 23:59:59', $timezone = 'Europe/Paris'));
-            $sortie->setDateLimiteInscription($datt->dateTimeThisYear($max = 'now', $timezone = 'Europe/Paris'));
-            $sortie->setDuree(1);
-            $sortie->setEtat($etats[$number->numberBetween(0,sizeof($etats) -1 )]);
+            $sortie->setDateLimiteInscription($datt->dateTimeThisYear($max = $sortie->getDateHeureDebut(), $timezone = 'Europe/Paris'));
+            $sortie->setDuree($number->numberBetween($min=3, $max=24)*10);
+            if($sortie->getDateHeureDebut() >= new \DateTime('now') && $sortie->getDateHeureDebut()->modify('+'. $sortie->getDuree().'minutes') <= new \DateTime('now') ){
+                $sortie->setEtat($etats[2]);
+            } else if($sortie->getDateHeureDebut() > new \DateTime('now')){
+                $sortie->setEtat($etats[$number->numberBetween(0, 1)]);
+            } else {
+                $sortie->setEtat($etats[$number->numberBetween(3, 5)]);
+            }
+
             $sortie->setLieu($lieux[$number->numberBetween(0,sizeof($lieux) -1 )]);
             $sortie->setInfosSortie($lorem->sentence());
             $sortie->setNbInscriptionMax($number->numberBetween($min=1, $max=8));

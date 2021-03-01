@@ -55,7 +55,7 @@ class SortieType extends AbstractType
         ]);
 
         $builder->add('duree', IntegerType::class, [
-            'label' => 'Duree:',
+            'label' => 'Duree (en minutes):',
             'trim' => true,
             'required' => true,
         ]);
