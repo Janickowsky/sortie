@@ -29,22 +29,26 @@ class Lieu
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"api_lieu"})
      */
     private $rue;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"api_lieu"})
      */
     private $latitude;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"api_lieu"})
      */
     private $longitude;
 
     /**
      * @ORM\ManyToOne(targetEntity=Ville::class, inversedBy="lieux")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"api_lieu"})
      */
     private $ville;
 

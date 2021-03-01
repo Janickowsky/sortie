@@ -23,8 +23,19 @@ class LieuRepository extends ServiceEntityRepository
         $req = $this->createQueryBuilder('lieu')
             ->where('lieu.ville = :id_ville')
             ->setParameter('id_ville', $idVille);
+
         return $req->getQuery()->getResult();
     }
+
+    public function getLieuById($idLieu){
+        $req = $this->createQueryBuilder('lieu')
+            ->innerJoin('lieu.ville','ville')->addSelect('ville')
+            ->where('lieu.id = :id_lieu')
+            ->setParameter('id_lieu', $idLieu);
+
+        return $req->getQuery()->getSingleResult();
+    }
+
 
     public function getAllSortie(){
         $req = $this->createQueryBuilder('lieu')
