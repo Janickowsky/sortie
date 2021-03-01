@@ -7,6 +7,8 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -34,6 +36,18 @@ class SortieSearchType extends AbstractType
             'label' => 'Le nom de la sortie contient:',
             'trim' => true,
             'required' => false,
+        ]);
+
+        $builder->add('dateDepart', DateType::class, [
+            'label' => 'Entre',
+            'required' => false,
+            'widget' => 'single_text',
+        ]);
+
+        $builder->add('dateFin', DateType::class, [
+            'label' => 'et',
+            'required' => false,
+            'widget' => 'single_text',
         ]);
 
         $builder->add('orgaTri', CheckboxType ::class, [

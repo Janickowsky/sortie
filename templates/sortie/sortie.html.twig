@@ -10,91 +10,106 @@
         </div>
     {% endfor %}
 
-        {{ form_start(formSearch) }}
-        <div class="form-group">
-            {{ form_label(formSearch.site) }}
-            {{ form_widget(formSearch.site, {'attr': {'class': 'form-control'}}) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(formSearch.nomSortie) }}
-            {{ form_widget(formSearch.nomSortie, {'attr': {'class': 'form-control'}}) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(formSearch.orgaTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
-            {{ form_widget(formSearch.orgaTri, {'attr': {'class': 'form-check'}}) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(formSearch.inscritTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
-            {{ form_widget(formSearch.inscritTri, {'attr': {'class': 'form-check'}}) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(formSearch.nonInscritTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
-            {{ form_widget(formSearch.nonInscritTri, {'attr': {'class': 'form-check'}}) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(formSearch.passeTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
-            {{ form_widget(formSearch.passeTri, {'attr': {'class': 'form-check'}}) }}
-        </div>
+        <div>
+            <h3>Filtrer les sorties</h3>
+            {{ form_start(formSearch) }}
+            <div class="form-group">
+                {{ form_label(formSearch.site) }}
+                {{ form_widget(formSearch.site, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(formSearch.nomSortie) }}
+                {{ form_widget(formSearch.nomSortie, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(formSearch.dateDepart) }}
+                {{ form_widget(formSearch.dateDepart, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(formSearch.dateFin) }}
+                {{ form_widget(formSearch.dateFin, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(formSearch.orgaTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
+                {{ form_widget(formSearch.orgaTri, {'attr': {'class': 'form-check'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(formSearch.inscritTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
+                {{ form_widget(formSearch.inscritTri, {'attr': {'class': 'form-check'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(formSearch.nonInscritTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
+                {{ form_widget(formSearch.nonInscritTri, {'attr': {'class': 'form-check'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(formSearch.passeTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
+                {{ form_widget(formSearch.passeTri, {'attr': {'class': 'form-check'}}) }}
+            </div>
 
-        <div class="form-group">
-            {{ form_widget(formSearch.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+            <div class="form-group">
+                {{ form_widget(formSearch.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+            </div>
+            {{ form_end(formSearch) }}
         </div>
-        {{ form_end(formSearch) }}
-    <div class="mt-5 overflow-auto text-left" style="height: 300px;">
-        <table class="table table-hover">
-            <thead>
-            <tr class="table-active">
-                <th scope="col">Nom de la sortie</th>
-                <th scope="col">Date de la sortie</th>
-                <th scope="col">Clôture</th>
-                <th scope="col">inscrits/places</th>
-                <th scope="col">Etat</th>
-                <th scope="col">Inscrit</th>
-                <th scope="col">Organisateur</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for sortie in sorties %}
-                <tr class="table-light">
-                    <th>{{ sortie.nom }}</th>
-                    <th>{{ sortie.dateHeureDebut|format_datetime('short','short',locale='fr') }}</th>
-                    <th>{{ sortie.dateLimiteInscription|format_datetime('short', 'none',locale='fr') }}</th>
-                    <th>{{ sortie.participants|length }}/ {{ sortie.nbInscriptionMax }}</th>
-                    <th>{{ sortie.etat.libelle }}</th>
-                    {% if app.user in sortie.participants %}
-                        <th>X</th>
-                    {% else %}
-                        <th> </th>
-                    {% endif %}
-                    {% if app.user and app.user == sortie.organisateur %}
-                        <th><a href="{{ path('user_monProfil') }}">{{ sortie.organisateur.pseudo }}</a></th>
-                    {% else %}
-                        <th><a href="{{ path('user_detailUser', {'id': sortie.organisateur.getId()}) }}">{{ sortie.organisateur.pseudo }}</a></th>
-                    {% endif %}
-                    <th>
-                        {% if app.user %}
-                            {% if sortie.etat.libelle == 'Ouverte'  %}
-                                <a href="{{ path('sortie_detailSortie', {'id': sortie.getId()}) }}">Afficher</a>
-                                {% if app.user in sortie.participants %}
-                                    - <a href="{{ url('sortie_sedesister', {'id': sortie.getId()}) }}">Se désister</a>
-                                {% elseif app.user == sortie.organisateur  %}
-                                    - <a href="{{ path('sortie_annulerSortie',{'id': sortie.getId()}) }}">Annuler</a>
-                                {% elseif sortie.nbInscriptionMax > sortie.participants|length %}
-                                    - <a href="{{ url('sortie_sinscrire', {'id': sortie.getId()}) }}">S'inscrire</a>
-                                {% endif %}
-                            {% elseif sortie.etat.libelle == 'Créée' and app.user == sortie.organisateur %}
-                                <a href="{{ path('sortie_modifierSortie', {'id': sortie.getId()}) }}">Modifier</a>
-                                - <a href="#">Publier</a>
-                            {% else %}
-                                <a href="{{ path('sortie_detailSortie', {'id': sortie.getId()}) }}">Afficher</a>
-                            {% endif %}
-                        {% endif %}
-                    </th>
+    <div>
+        <h3>Liste des sorties</h3>
+
+        <div class="mt-5 overflow-auto text-left" style="height: 300px;">
+            <table class="table table-hover">
+                <thead>
+                <tr class="table-active">
+                    <th scope="col">Nom de la sortie</th>
+                    <th scope="col">Date de la sortie</th>
+                    <th scope="col">Clôture</th>
+                    <th scope="col">inscrits/places</th>
+                    <th scope="col">Etat</th>
+                    <th scope="col">Inscrit</th>
+                    <th scope="col">Organisateur</th>
+                    <th scope="col">Actions</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for sortie in sorties %}
+                    <tr class="table-light">
+                        <th>{{ sortie.nom }}</th>
+                        <th>{{ sortie.dateHeureDebut|format_datetime('short','short',locale='fr') }}</th>
+                        <th>{{ sortie.dateLimiteInscription|format_datetime('short', 'none',locale='fr') }}</th>
+                        <th>{{ sortie.participants|length }}/ {{ sortie.nbInscriptionMax }}</th>
+                        <th>{{ sortie.etat.libelle }}</th>
+                        {% if app.user in sortie.participants %}
+                            <th>X</th>
+                        {% else %}
+                            <th> </th>
+                        {% endif %}
+                        {% if app.user and app.user == sortie.organisateur %}
+                            <th><a href="{{ path('user_monProfil') }}">{{ sortie.organisateur.pseudo }}</a></th>
+                        {% else %}
+                            <th><a href="{{ path('user_detailUser', {'id': sortie.organisateur.getId()}) }}">{{ sortie.organisateur.pseudo }}</a></th>
+                        {% endif %}
+                        <th>
+                            {% if app.user %}
+                                {% if sortie.etat.libelle == 'Ouverte'  %}
+                                    <a href="{{ path('sortie_detailSortie', {'id': sortie.getId()}) }}">Afficher</a>
+                                    {% if app.user in sortie.participants %}
+                                        - <a href="{{ url('sortie_sedesister', {'id': sortie.getId()}) }}">Se désister</a>
+                                    {% elseif app.user == sortie.organisateur  %}
+                                        - <a href="{{ path('sortie_annulerSortie',{'id': sortie.getId()}) }}">Annuler</a>
+                                    {% elseif sortie.nbInscriptionMax > sortie.participants|length %}
+                                        - <a href="{{ url('sortie_sinscrire', {'id': sortie.getId()}) }}">S'inscrire</a>
+                                    {% endif %}
+                                {% elseif sortie.etat.libelle == 'Créée' and app.user == sortie.organisateur %}
+                                    <a href="{{ path('sortie_modifierSortie', {'id': sortie.getId()}) }}">Modifier</a>
+                                    - <a href="#">Publier</a>
+                                {% else %}
+                                    <a href="{{ path('sortie_detailSortie', {'id': sortie.getId()}) }}">Afficher</a>
+                                {% endif %}
+                            {% endif %}
+                        </th>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div class="d-flex justify-content-left mt-3">

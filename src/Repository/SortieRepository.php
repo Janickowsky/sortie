@@ -7,6 +7,7 @@ use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+
 /**
  * @method Sortie|null find($id, $lockMode = null, $lockVersion = null)
  * @method Sortie|null findOneBy(array $criteria, array $orderBy = null)
@@ -23,9 +24,15 @@ class SortieRepository extends ServiceEntityRepository
     public function getAllSortie($user){
         $req = $this->createQueryBuilder('sortie')
             ->innerJoin('sortie.etat', 'etat')->addSelect('etat')
+            ->innerJoin('sortie.campus', 'site')->addSelect('site')
+            ->innerjoin('sortie.participants', 'user')->addSelect('user')
             ->where("etat.libelle = 'Ouverte'")
+            ->orwhere("site.nom = :userCampusId")
             ->orWhere("sortie.organisateur = :user")
+            ->orWhere("user.id = :userId")
+            ->setParameter('userId',$user->getId())
             ->setParameter('user',$user)
+            ->setParameter('userCampusId',$user->getCampus())
             ->orderBy('sortie.dateHeureDebut', 'desc');
 
 
@@ -45,23 +52,43 @@ class SortieRepository extends ServiceEntityRepository
 
     public function getSortieSearch($user, ?Site $site = null,
                                     ?String $nomSortie = null,
-                                    ?bool $orgaTri,
-                                    ?bool $inscritTri,
-                                    ?bool $nonInscritTri,
-                                    ?bool $passeTri
+                                    ?\DateTime $dateDepart = null,
+                                    ?\DateTime $dateFin = null,
+                                    ?bool $orgaTri = false,
+                                    ?bool $inscritTri = false,
+                                    ?bool $nonInscritTri = false,
+                                    ?bool $passeTri= false
     ){
         $req = $this->createQueryBuilder('sortie')
             ->innerJoin('sortie.etat', 'etat')->addSelect('etat')
-            ->innerJoin('sortie.campus', 'site')->addSelect('site');
+            ->innerJoin('sortie.campus', 'site')->addSelect('site')
+            ->innerjoin('sortie.participants', 'user')->addSelect('user');
+
         if($orgaTri){
             $req->andWhere("sortie.organisateur = :user")
             ->setParameter('user',$user);
+        }
+        if($inscritTri){
+            $req->orWhere("user.id = :userId")
+                ->setParameter('userId',$user->getId());
+        }
+        if($nonInscritTri){
+            $req->orWhere("user.id != :userId")
+                ->setParameter('userId',$user->getId());
+        }
+        if($passeTri){
+            $req->andWhere("etat.libelle = 'Passée'");
         }
         if(!is_null($site)){
             $req->andWhere('site.id = :idSite')->setParameter('idSite', $site);
         }
         if(!is_null($nomSortie)){
             $req->andWhere('sortie.nom LIKE :nomSortie')->setParameter('nomSortie', '%'.$nomSortie.'%');
+        }
+        if(!is_null($dateDepart) && !is_null($dateFin)){
+            $req->andWhere('sortie.dateHeureDebut BETWEEN :dateDepart AND :dateFin')
+                ->setParameter('dateDepart', $dateDepart)
+                ->setParameter('dateFin', $dateFin->setTime(23,59,00));
         }
 
         $req->orderBy('sortie.dateHeureDebut', 'desc');

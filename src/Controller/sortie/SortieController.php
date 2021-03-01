@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 
 /**
@@ -37,6 +38,8 @@ class SortieController extends AbstractController{
         if($formSearch->isSubmitted() && $formSearch->isValid()){
             $site = $formSearch->get('site')->getData();
             $nomSortie = $formSearch->get('nomSortie')->getData();
+            $dateDepart = $formSearch->get('dateDepart')->getData();
+            $dateFin =  $formSearch->get('dateFin')->getData();
             $orgaTri = $formSearch->get('orgaTri')->getData();
             $inscritTri = $formSearch->get('inscritTri')->getData();
             $nonInscritTri = $formSearch->get('nonInscritTri')->getData();
@@ -46,10 +49,12 @@ class SortieController extends AbstractController{
                 $this->getUser(),
                 $site ?? null,
                 $nomSortie ?? null,
-                $orgaTri ?? null,
-                $inscritTri ?? null,
-                $nonInscritTri ?? null,
-                $passeTri ?? null
+                $dateDepart ?? null,
+                $dateFin ?? null,
+                $orgaTri ?? false,
+                $inscritTri ?? false,
+                $nonInscritTri ?? false,
+                $passeTri ?? false
             );
         }else{
             $sorties = $entityManager->getRepository(Sortie::class)->getAllSortie($this->getUser());
