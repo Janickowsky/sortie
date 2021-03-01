@@ -26,14 +26,18 @@ class SortieRepository extends ServiceEntityRepository
             ->innerJoin('sortie.etat', 'etat')->addSelect('etat')
             ->innerJoin('sortie.campus', 'site')->addSelect('site')
             ->innerjoin('sortie.participants', 'user')->addSelect('user')
-            ->where("etat.libelle = 'Ouverte'")
-            ->orwhere("site.nom = :userCampusId")
-            ->orWhere("sortie.organisateur = :user")
-            ->orWhere("user.id = :userId")
-            ->setParameter('userId',$user->getId())
-            ->setParameter('user',$user)
-            ->setParameter('userCampusId',$user->getCampus())
-            ->orderBy('sortie.dateHeureDebut', 'desc');
+            ->where("etat.libelle = 'Ouverte'");
+
+        if(!is_null($user)){
+                $req ->orwhere("site.nom = :userCampusId")
+                    ->orWhere("sortie.organisateur = :user")
+                    ->orWhere("user.id = :userId")
+                    ->setParameter('userId',$user->getId())
+                    ->setParameter('user',$user)
+                    ->setParameter('userCampusId',$user->getCampus());
+            }
+
+        $req->orderBy('sortie.dateHeureDebut', 'desc');
 
 
         return $req->getQuery()->getResult();
