@@ -101,7 +101,6 @@ class SortieType extends AbstractType
             if($sortie->getLieu() != null){
                 $form->get('ville')->setData($sortie->getLieu()->getVille());
             }
-
         });
     }
 

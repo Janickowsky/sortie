@@ -3,18 +3,24 @@ window.onload = init;
 function init(){
     jQuery("#sortie_ville").on("change", recuplieu);
     jQuery("#sortie_lieu").on("change", modifLieu);
-    recuplieu();
+    if(!jQuery("#sortie_lieu").val()){
+        jQuery("#sortie_lieu").on("load",clear());
+    }else{
+        recuplieu();
+    }
 }
-
+function clear(){
+    jQuery('#sortie_lieu').empty();
+}
 function recuplieu(lieu){
     let idVille = jQuery("#sortie_ville").val();
+    jQuery('#sortie_lieu').empty();
 
     jQuery.ajax({
         url:'http://127.0.0.1:8000/api/lieu/api/recuplieuByIdVille-' +idVille,
         method: 'GET',
     })
         .done(function(datas){
-            jQuery('#sortie_lieu').empty();
             datas.forEach(function (lieu){
                 jQuery('#sortie_lieu').append(jQuery('<option>').attr('value',lieu.id).text(lieu.nom));
             });
