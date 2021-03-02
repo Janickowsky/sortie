@@ -113,9 +113,9 @@ class SortieController extends AbstractController{
             $entityManager->persist($sortie);
             $entityManager->flush();
 
-            $this->addFlash('success',"Votre sortie n°" .$sortie->getNom(). "a bien été ajoutée");
+            $this->addFlash('success',"Votre sortie n°" .$sortie->getNom(). " a bien été ajoutée");
 
-            return $this->redirectToRoute('sortie_detailSortie', ['id' => $sortie->getId()]);
+            return $this->redirectToRoute('sortie_modifierSortie', ['id' => $sortie->getId()]);
         }
 
         return $this->render("sortie/creerSortie.html.twig",["formSortie" => $formSortie->createView()]);
@@ -148,17 +148,17 @@ class SortieController extends AbstractController{
                 $etat = new Etat();
                 if ($request->request->get('save')) {
                     $etat = $entityManager->getRepository(Etat::class)->getEtatByLibelle(self::ETAT_CREEE);
+                    $this->addFlash('success',"La sortie " .$sortie->getNom(). " a bien été modifiée");
                 } elseif ($request->request->get('publish')) {
                     $etat = $entityManager->getRepository(Etat::class)->getEtatByLibelle(self::ETAT_OUVERTURE);
+                    $this->addFlash('success',"La sortie " .$sortie->getNom(). " a bien été publiée");
                 }
 
                 $sortie->setEtat($etat);
                 $entityManager->persist($sortie);
                 $entityManager->flush();
 
-                $this->addFlash('success',"La sortie " .$sortie->getNom(). " a bien été modifiée");
-
-                return $this->redirectToRoute('sortie_detailSortie', ['id' => $sortie->getId()]);
+                return $this->redirectToRoute('sortie_listeSorties', ['id' => $sortie->getId()]);
             }
 
             return $this->render("sortie/modifierSortie.html.twig", ["formSortie" => $formSortie->createView()]);
@@ -237,25 +237,25 @@ class SortieController extends AbstractController{
         if($sortie->getOrganisateur() == $this->getUser()) {
             $formAnnuler = $this->createForm(SortieAnnulerType::class);
             $formAnnuler->handleRequest($request);
-            if(!empty(trim($formAnnuler->get('motif')->getData()))){
-                if ($formAnnuler->isSubmitted() && $formAnnuler->isValid()){
-                    $sortie->setMotif($formAnnuler->get('motif')->getData());
-                    $etat = $entityManager->getRepository(Etat::class)->getEtatByLibelle(self::ETAT_ANNULEE);
-                    $sortie->setEtat($etat);
-                    $entityManager->persist($sortie);
-                    $entityManager->flush();
+                if($formAnnuler->isSubmitted() && $formAnnuler->isValid()) {
+                    if (!empty(trim($formAnnuler->get('motif')->getData()))) {
+                        $sortie->setMotif($formAnnuler->get('motif')->getData());
+                        $etat = $entityManager->getRepository(Etat::class)->getEtatByLibelle(self::ETAT_ANNULEE);
+                        $sortie->setEtat($etat);
+                        $entityManager->persist($sortie);
+                        $entityManager->flush();
 
-                    $this->addFlash('success', "La sortie ". $sortie->getNom() ." a bien été annulée");
+                        $this->addFlash('success', "La sortie " . $sortie->getNom() . " a bien été annulée");
 
-                    return $this->redirectToRoute('home_home');
+                        return $this->redirectToRoute('home_home');
+                    }else{
+                        $this->addFlash('errors','Veuillez saisir un motif');
+                    }
                 }
-            }else{
-                $this->addFlash('errors','Veuillez saisir un motif');
                 return $this->render("sortie/annulerSortie.html.twig", [
                     'sortie'=>$sortie,
                     'formAnnuler'=>$formAnnuler->createView()
                 ]);
-            }
         }else{
             $this->addFlash('errors',"Vous n'êtes pas l'organisateur de cette sortie");
             return $this->redirectToRoute('home_home');

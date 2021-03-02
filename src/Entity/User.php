@@ -58,7 +58,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=10)
      * @Assert\NotBlank(message="Ce champ est requis")
-     * @Assert\Length(min = 10)
+     * @Assert\Length(min = 10, max=10)
      */
     private $telephone;
 

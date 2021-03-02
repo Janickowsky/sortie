@@ -22,24 +22,18 @@ class SortieRepository extends ServiceEntityRepository
     }
 
     public function getAllSortie($user){
-        $req = $this->createQueryBuilder('sortie')
-            ->innerJoin('sortie.etat', 'etat')->addSelect('etat')
-            ->innerJoin('sortie.campus', 'site')->addSelect('site')
-            ->innerjoin('sortie.participants', 'user')->addSelect('user')
-            ->where("etat.libelle = 'Ouverte'");
+            $req = $this->createQueryBuilder('sortie');
 
-        if(!is_null($user)){
-                $req ->orwhere("site.nom = :userCampusId")
-                    ->orWhere("sortie.organisateur = :user")
-                    ->orWhere("user.id = :userId")
-                    ->setParameter('userId',$user->getId())
-                    ->setParameter('user',$user)
-                    ->setParameter('userCampusId',$user->getCampus());
-            }
-        $req->andwhere("etat.libelle != 'Clôturée'")
-            ->orderBy('sortie.dateHeureDebut', 'desc');
-
-
+        if($user){
+            $req->innerJoin('sortie.campus','site')->addSelect('site');
+            $req->innerJoin('sortie.etat','etat')->addSelect('etat');
+            $req->leftJoin('sortie.participants','user')->addSelect('user');
+            $req->where('site.id = :idSite')->setParameter('idSite',$user->getCampus());
+            $req->andWhere("etat.libelle NOT LIKE 'Clôturée'");
+            $req->andWhere("etat.libelle LIKE 'Ouverte'");
+            $req->orWhere('sortie.organisateur = :idUser')->setParameter('idUser',$user->getId());
+            $req->orderBy('sortie.dateHeureDebut', 'desc');
+        }
         return $req->getQuery()->getResult();
     }
 
