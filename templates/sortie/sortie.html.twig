@@ -5,7 +5,7 @@
 {% block body %}
 
     {% for message in app.flashes('success') %}
-        <div class="d-flex alert alert-primary justify-content-center">
+        <div class="d-flex alert alert-info justify-content-center">
             {{ message }}
         </div>
     {% endfor %}
@@ -137,7 +137,7 @@
                                     {% endif %}
                                 {% elseif sortie.etat.libelle == 'Créée' and app.user == sortie.organisateur %}
                                     <a href="{{ path('sortie_modifierSortie', {'id': sortie.getId()}) }}">Modifier</a>
-                                    - <a href="#">Publier</a>
+                                    - <a href="{{ path('sortie_publierSortie', {'id': sortie.getId()}) }}">Publier</a>
                                 {% else %}
                                     <a href="{{ path('sortie_detailSortie', {'id': sortie.getId()}) }}">Afficher</a>
                                 {% endif %}

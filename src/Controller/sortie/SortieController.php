@@ -115,7 +115,7 @@ class SortieController extends AbstractController{
 
             $this->addFlash('success',"Votre sortie n°" .$sortie->getNom(). " a bien été ajoutée");
 
-            return $this->redirectToRoute('sortie_modifierSortie', ['id' => $sortie->getId()]);
+            return $this->redirectToRoute('home_home');
         }
 
         return $this->render("sortie/creerSortie.html.twig",["formSortie" => $formSortie->createView()]);
@@ -260,5 +260,22 @@ class SortieController extends AbstractController{
             $this->addFlash('errors',"Vous n'êtes pas l'organisateur de cette sortie");
             return $this->redirectToRoute('home_home');
         }
+    }
+    /**
+     * @Route(name="publierSortie", path="/publiersortie-{id}", requirements={"id":"\d+"}, methods={"GET", "POST"})
+     */
+    public function publierSortie(Request $request, EntityManagerInterface $entityManager){
+        $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
+        if($this->getUser() == $sortie->getOrganisateur() && $sortie->getEtat()->getLibelle() == self::ETAT_CREEE){
+            $etat = $entityManager->getRepository(Etat::class)->getEtatByLibelle(self::ETAT_OUVERTURE);
+            $sortie->setEtat($etat);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+            $this->addFlash('success',"La sortie " .$sortie->getNom(). " a bien été publiée");
+        } else {
+            $this->addFlash('errors',"Impossible de publier l'annonce : " .$sortie->getNom());
+        }
+
+        return $this->redirectToRoute('home_home');
     }
 }
