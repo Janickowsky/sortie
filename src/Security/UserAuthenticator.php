@@ -47,16 +47,27 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator implements Passwo
 
     public function getCredentials(Request $request)
     {
-        $credentials = [
-            'email' => $request->request->get('email'),
-            'password' => $request->request->get('password'),
-            'csrf_token' => $request->request->get('_csrf_token'),
-        ];
-        $request->getSession()->set(
-            Security::LAST_USERNAME,
-            $credentials['email']
-        );
-
+        if(filter_var($request->request->get('identifiant'),FILTER_VALIDATE_EMAIL)){
+            $credentials = [
+                'email' => $request->request->get('identifiant'),
+                'password' => $request->request->get('password'),
+                'csrf_token' => $request->request->get('_csrf_token'),
+            ];
+            $request->getSession()->set(
+                Security::LAST_USERNAME,
+                $credentials['email']
+            );
+        }else{
+            $credentials = [
+                'pseudo' => $request->request->get('identifiant'),
+                'password' => $request->request->get('password'),
+                'csrf_token' => $request->request->get('_csrf_token'),
+            ];
+            $request->getSession()->set(
+                Security::LAST_USERNAME,
+                $credentials['pseudo']
+            );
+        }
         return $credentials;
     }
 
@@ -66,13 +77,18 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator implements Passwo
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }
-
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
-
-        if (!$user) {
-            // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Email ou mot de passe invalide');
+        if(isset($credentials['email'])){
+            $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
+            if (!$user) {
+                throw new CustomUserMessageAuthenticationException('Identifiant ou mot de passe invalide');
+            }
+        }else{
+            $user = $this->entityManager->getRepository(User::class)->findOneBy(['pseudo' => $credentials['pseudo']]);
+            if (!$user) {
+                throw new CustomUserMessageAuthenticationException('Identifiant ou mot de passe invalide');
+            }
         }
+
 
         return $user;
     }
@@ -82,10 +98,8 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator implements Passwo
         if($this->passwordEncoder->isPasswordValid($user, $credentials['password'])){
             return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
         } else{
-            throw new CustomUserMessageAuthenticationException('Email ou mot de passe invalide');
+            throw new CustomUserMessageAuthenticationException('Identifiant ou mot de passe invalide');
         }
-
-
     }
 
     /**

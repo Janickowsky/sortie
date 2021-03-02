@@ -183,7 +183,10 @@ class SortieController extends AbstractController{
     public function sinscrire(Request $request, EntityManagerInterface $entityManager){
         $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
 
-        if($sortie->getEtat()->getLibelle() == self::ETAT_OUVERTURE && count($sortie->getParticipants()) < $sortie->getNbInscriptionMax()){
+        if($sortie->getEtat()->getLibelle() == self::ETAT_OUVERTURE
+            && count($sortie->getParticipants()) < $sortie->getNbInscriptionMax()
+            && $sortie->getDateLimiteInscription() > new \DateTime('now'))
+        {
             $sortie->addParticipant($this->getUser());
             $this->getUser()->addSorty($sortie);
             $entityManager->persist($sortie);
@@ -222,26 +225,26 @@ class SortieController extends AbstractController{
         $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
 
         if($sortie->getOrganisateur() == $this->getUser()) {
+            $formAnnuler = $this->createForm(SortieAnnulerType::class);
+            $formAnnuler->handleRequest($request);
+            if(!empty(trim($formAnnuler->get('motif')->getData()))){
+                if ($formAnnuler->isSubmitted() && $formAnnuler->isValid()){
+                    $sortie->setMotif($formAnnuler->get('motif')->getData());
+                    $etat = $entityManager->getRepository(Etat::class)->getEtatByLibelle(self::ETAT_ANNULEE);
+                    $sortie->setEtat($etat);
+                    $entityManager->persist($sortie);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Votre sortie a bien été annulée');
 
-        $formAnnuler = $this->createForm(SortieAnnulerType::class);
-        $formAnnuler->handleRequest($request);
-        if ($formAnnuler->isSubmitted() && $formAnnuler->isValid()){
-            $sortie->setMotif($formAnnuler->get('motif')->getData());
-            $etat = $entityManager->getRepository(Etat::class)->getEtatByLibelle(self::ETAT_ANNULEE);
-            $sortie->setEtat($etat);
-            $entityManager->persist($sortie);
-            $entityManager->flush();
-            $this->addFlash('success', 'Votre sortie a bien été annulée');
-
-            return $this->redirectToRoute('home_home');
-        }
-
-
-
-        return $this->render("sortie/annulerSortie.html.twig", [
-            'sortie'=>$sortie,
-            'formAnnuler'=>$formAnnuler->createView()
-        ]);
+                    return $this->redirectToRoute('home_home');
+                }
+            }else{
+                $this->addFlash('errors','Veuillez saisir un motif');
+                return $this->render("sortie/annulerSortie.html.twig", [
+                    'sortie'=>$sortie,
+                    'formAnnuler'=>$formAnnuler->createView()
+                ]);
+            }
         }else{
             return $this->redirectToRoute('home_home');
         }

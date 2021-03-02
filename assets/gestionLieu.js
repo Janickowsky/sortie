@@ -3,15 +3,8 @@ window.onload = init;
 function init(){
     jQuery("#sortie_ville").on("change", recuplieu);
     jQuery("#sortie_lieu").on("change", modifLieu);
-    if(!jQuery("#sortie_lieu").val()){
-        jQuery("#sortie_lieu").on("load",clear());
-    }else{
-        recuplieu();
-    }
 }
-function clear(){
-    jQuery('#sortie_lieu').empty();
-}
+
 function recuplieu(lieu){
     let idVille = jQuery("#sortie_ville").val();
     jQuery('#sortie_lieu').empty();

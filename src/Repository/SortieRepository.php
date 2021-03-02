@@ -36,8 +36,8 @@ class SortieRepository extends ServiceEntityRepository
                     ->setParameter('user',$user)
                     ->setParameter('userCampusId',$user->getCampus());
             }
-
-        $req->orderBy('sortie.dateHeureDebut', 'desc');
+        $req->andwhere("etat.libelle != 'Clôturée'")
+            ->orderBy('sortie.dateHeureDebut', 'desc');
 
 
         return $req->getQuery()->getResult();
@@ -94,8 +94,8 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('dateDepart', $dateDepart)
                 ->setParameter('dateFin', $dateFin->setTime(23,59,00));
         }
-
-        $req->orderBy('sortie.dateHeureDebut', 'desc');
+        $req->andwhere("etat.libelle != 'Clôturée'")
+            ->orderBy('sortie.dateHeureDebut', 'desc');
 
         return $req->getQuery()->getResult();
     }
