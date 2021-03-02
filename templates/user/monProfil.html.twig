@@ -3,6 +3,16 @@
 {% block title %}Mon Profil{% endblock %}
 
 {% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="d-flex alert alert-primary justify-content-center">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('errors') %}
+        <div class="d-flex alert alert-danger justify-content-center">
+            {{ message }}
+        </div>
+    {% endfor %}
 
     {% form_theme UserType 'bootstrap_4_layout.html.twig' %}
 

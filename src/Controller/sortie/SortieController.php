@@ -202,7 +202,7 @@ class SortieController extends AbstractController{
 
             $this->addFlash('success','Vous avez été bien inscrit à la sortie '.$sortie->getNom());
         }else{
-            $this->addFlash('errors','Vous avez pas été inscrit à la sortie '.$sortie->getNom());
+            $this->addFlash('errors','Vous ne pouvez pas vous inscrire à la sortie '.$sortie->getNom());
         }
         return  $this->redirectToRoute('home_home');
     }
@@ -223,7 +223,7 @@ class SortieController extends AbstractController{
 
             $this->addFlash('success','Vous avez été bien désinscrit de la sortie '.$sortie->getNom());
         }else{
-            $this->addFlash('errors','Vous avez pas été désinscrit de la sortie '.$sortie->getNom());
+            $this->addFlash('errors','Vous ne pouvez pas vous désinscrire de la sortie '.$sortie->getNom());
         }
         return  $this->redirectToRoute('home_home');
     }
