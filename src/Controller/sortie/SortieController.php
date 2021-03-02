@@ -113,12 +113,15 @@ class SortieController extends AbstractController{
             $entityManager->persist($sortie);
             $entityManager->flush();
 
-            $this->addFlash('success',"Votre sortie à bien été ajoutée");
+            $this->addFlash('success',"Votre sortie n°" .$sortie->getNom(). "a bien été ajoutée");
 
             return $this->redirectToRoute('sortie_detailSortie', ['id' => $sortie->getId()]);
         }
 
         return $this->render("sortie/creerSortie.html.twig",["formSortie" => $formSortie->createView()]);
+
+
+
     }
 
     /**
@@ -153,11 +156,15 @@ class SortieController extends AbstractController{
                 $entityManager->persist($sortie);
                 $entityManager->flush();
 
+                $this->addFlash('success',"La sortie " .$sortie->getNom(). " a bien été modifiée");
+
                 return $this->redirectToRoute('sortie_detailSortie', ['id' => $sortie->getId()]);
             }
 
             return $this->render("sortie/modifierSortie.html.twig", ["formSortie" => $formSortie->createView()]);
+
         }else{
+            $this->addFlash('errors',"Vous n'êtes pas l'organisateur de cette sortie");
             return $this->redirectToRoute('home_home');
         }
     }
@@ -171,10 +178,11 @@ class SortieController extends AbstractController{
             $entityManager->remove($sortie);
             $entityManager->flush();
 
-            $this->addFlash('success', "Votre sortie à bien été supprimée");
+            $this->addFlash('success', "La sortie " .$sortie->getNom(). " a bien été supprimée");
+        }else{
+            $this->addFlash('errors', "La sortie ".$sortie->getNom()." n'a été supprimée");
+            return  $this->redirectToRoute('home_home');
         }
-
-        return  $this->redirectToRoute('home_home');
     }
 
     /**
@@ -193,8 +201,9 @@ class SortieController extends AbstractController{
             $entityManager->flush();
 
             $this->addFlash('success','Vous avez été bien inscrit à la sortie '.$sortie->getNom());
+        }else{
+            $this->addFlash('errors','Vous avez pas été inscrit à la sortie '.$sortie->getNom());
         }
-
         return  $this->redirectToRoute('home_home');
     }
 
@@ -213,8 +222,9 @@ class SortieController extends AbstractController{
             $entityManager->flush();
 
             $this->addFlash('success','Vous avez été bien désinscrit de la sortie '.$sortie->getNom());
+        }else{
+            $this->addFlash('errors','Vous avez pas été désinscrit de la sortie '.$sortie->getNom());
         }
-
         return  $this->redirectToRoute('home_home');
     }
 
@@ -234,7 +244,8 @@ class SortieController extends AbstractController{
                     $sortie->setEtat($etat);
                     $entityManager->persist($sortie);
                     $entityManager->flush();
-                    $this->addFlash('success', 'Votre sortie a bien été annulée');
+
+                    $this->addFlash('success', "La sortie ". $sortie->getNom() ." a bien été annulée");
 
                     return $this->redirectToRoute('home_home');
                 }
@@ -246,6 +257,7 @@ class SortieController extends AbstractController{
                 ]);
             }
         }else{
+            $this->addFlash('errors',"Vous n'êtes pas l'organisateur de cette sortie");
             return $this->redirectToRoute('home_home');
         }
     }

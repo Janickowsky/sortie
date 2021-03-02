@@ -27,8 +27,4 @@ class VilleController extends AbstractController{
 
         return $this->render("ville/ville.html.twig",["villes" => $villes]);
     }
-
-
-
-
 }

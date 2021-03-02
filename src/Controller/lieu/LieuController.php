@@ -41,8 +41,11 @@ class LieuController extends AbstractController{
             // Validation de la transaction
             $em->flush();
 
+            $this->addFlash('success','Le lieu a bien été ajouté');
             // Redirection sur la page "Gérer les lieux"
             return $this->redirectToRoute('lieu_lieu');
+        }else{
+            $this->addFlash('errors',"Le lieu n'a pas été ajouté");
         }
 
         // Appel à la vue pour afficher le formulaire
