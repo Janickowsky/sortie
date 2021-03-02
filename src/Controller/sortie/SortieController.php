@@ -113,7 +113,7 @@ class SortieController extends AbstractController{
             $entityManager->persist($sortie);
             $entityManager->flush();
 
-            $this->addFlash('success',"Votre sortie n°" .$sortie->getNom(). " a bien été ajoutée");
+            $this->addFlash('success',"Votre sortie" .$sortie->getNom(). " a bien été ajoutée");
 
             return $this->redirectToRoute('home_home');
         }

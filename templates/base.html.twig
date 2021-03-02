@@ -43,9 +43,9 @@
                 </div>
             </nav>
             <div class="d-flex flex-column justify-content-end mt-2 mr-4">
-                <p class="align-self-end font-weight-bold text-primary">Date du jour: {{ "now"|date("d/m/Y")  }}</p>
+                <p class="align-self-end font-weight-bold text-info">Date du jour: {{ "now"|date("d/m/Y")  }}</p>
             {% if app.user %}
-                <p class="align-self-end font-weight-bold text-primary">Connecté: {{  app.user.prenom }} {{ app.user.nom|slice(0, 1) }}.</p>
+                <p class="align-self-end font-weight-bold text-info">Connecté: {{  app.user.prenom }} {{ app.user.nom|slice(0, 1) }}.</p>
             {% endif %}
             </div>
         </header>
