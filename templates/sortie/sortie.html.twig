@@ -19,7 +19,7 @@
         <div class="mb-3">
             <fieldset class="border border-primary rounded">
             {# Partie Titre filtre #}
-                <legend class="text-center" style="width: 20%"><h3>Filtrer les sorties</h3></legend>
+                <legend class="text-left ml-2 pl-3" style="width:25%"><h3>Filtrer les sorties</h3></legend>
                 {# Partie Filtre #}
                 <div class="d-flex align-items-center flex-wrap justify-content-around">
                     {# 1ère partie #}
@@ -72,11 +72,7 @@
                             {{ form_label(formSearch.passeTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
                             {{ form_widget(formSearch.passeTri, {'attr': {'class': 'form-check'}}) }}
                         </div>
-                    </div>
-
-                    {# 3ème partie #}
-                    <div  class="d-flex justify-content-center col-12">
-                        <div class="form-group">
+                        <div class="d-flex form-group justify-content-center">
                             {{ form_widget(formSearch.submit, {'attr': {'class': 'btn btn-primary'}}) }}
                         </div>
                     </div>
