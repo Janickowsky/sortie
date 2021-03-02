@@ -104,7 +104,7 @@
                         {% if sortie.participants|length == sortie.nbInscriptionMax and sortie.etat.libelle == 'Ouverte' %}
                             <th>Complet</th>
                         {% elseif date('now') > date(sortie.dateLimiteInscription) and sortie.etat.libelle == 'Ouverte' %}
-                            <th>Clôturée</th>
+                            <th>Fermée</th>
                         {% else %}
                             <th>{{ sortie.etat.libelle }}</th>
                         {% endif %}

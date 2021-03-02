@@ -3,6 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}{% endblock %}</title>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://bootswatch.com/4/minty/bootstrap.min.css">
         <link rel="icon" type="image/x-icon" href="{{ asset('build/images/favicon.png')}}">
         {{ encore_entry_script_tags('app') }}
@@ -29,25 +31,25 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('home_home') }}">Accueil</a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('user_monProfil') }}">Mon Profil</a>
-                        </li>
-                        <li class="nav-item">
-                            {% if app.user %}
-                                <a class="nav-link" href="{{ url('app_logout') }}">Se deconnecter</a>
-                            {% else %}
-                                <a class="nav-link" href="{{ url('app_login') }}">Se connecter</a>
-                            {% endif %}
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                    {{  app.user.prenom }} {{ app.user.nom|slice(0, 1) }}
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ path('user_monProfil') }}">Mon Profil</a>
+                                    {% if app.user %}
+                                        <a class="dropdown-item" href="{{ url('app_logout') }}">Se deconnecter</a>
+                                    {% else %}
+                                        <a class="dropdown-item" href="{{ url('app_login') }}">Se connecter</a>
+                                    {% endif %}
+                                </div>
+                            </div>
                         </li>
                     </ul>
                 </div>
             </nav>
-            <div class="d-flex flex-column justify-content-end mt-2 mr-4">
-                <p class="align-self-end font-weight-bold text-info">Date du jour: {{ "now"|date("d/m/Y")  }}</p>
-            {% if app.user %}
-                <p class="align-self-end font-weight-bold text-info">Connecté: {{  app.user.prenom }} {{ app.user.nom|slice(0, 1) }}.</p>
-            {% endif %}
-            </div>
         </header>
         <div class="container">
         {% block body %}{% endblock %}
