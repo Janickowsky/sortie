@@ -16,82 +16,83 @@
     {% endfor %}
 
         {# Filtre #}
-        <div>
+        <div class="mb-3">
+            <fieldset class="border border-primary rounded">
             {# Partie Titre filtre #}
-            <div>
-                <h3>Filtrer les sorties</h3>
-            </div>
-            {# Partie Filtre #}
-            <div class="d-flex align-items-center flex-wrap">
-                {# 1ère partie #}
-                <div class="container col-6 ">
-                    {{ form_start(formSearch) }}
-                    {% form_theme formSearch 'bootstrap_4_layout.html.twig' %}
-                    <div class="form-group">
-                        {{ form_label(formSearch.site) }}
-                        {{ form_widget(formSearch.site, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    <div class="form-group">
-                        {{ form_label(formSearch.nomSortie) }}
-                        {{ form_widget(formSearch.nomSortie, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    {# Date #}
-                    <div class="d-flex justify-content-between mb-3">
-                        <div class="form-group align-items-center row pl-3">
-                            {{ form_label(formSearch.dateDepart, null, {'attr': {'class': 'col-sm-2 col-form-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_widget(formSearch.dateDepart, {'attr': {'class': 'form-control'}}) }}
-                            </div>
-
+                <legend class="text-center" style="width: 20%"><h3>Filtrer les sorties</h3></legend>
+                {# Partie Filtre #}
+                <div class="d-flex align-items-center flex-wrap justify-content-around">
+                    {# 1ère partie #}
+                    <div class="container col-6 mr-1">
+                        {{ form_start(formSearch) }}
+                        {% form_theme formSearch 'bootstrap_4_layout.html.twig' %}
+                        <div class="form-group">
+                            {{ form_label(formSearch.site) }}
+                            {{ form_widget(formSearch.site, {'attr': {'class': 'form-control'}}) }}
                         </div>
-                        <div class="d-flex justify-content-end form-group align-items-center row">
-                            {{ form_label(formSearch.dateFin, null, {'attr': {'class': 'col-sm-2 col-form-label'}} ) }}
-                            <div class="col-sm-10">
-                                {{ form_widget(formSearch.dateFin, {'attr': {'class': 'form-control'}}) }}
-                            </div>
+                        <div class="form-group">
+                            {{ form_label(formSearch.nomSortie) }}
+                            {{ form_widget(formSearch.nomSortie, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        {# Date #}
+                        <div class="d-flex justify-content-between mb-3">
+                            <div class="form-group align-items-center row pl-3">
+                                {{ form_label(formSearch.dateDepart, null, {'attr': {'class': 'col-sm-2 col-form-label'}}) }}
+                                <div class="col-sm-10">
+                                    {{ form_widget(formSearch.dateDepart, {'attr': {'class': 'form-control'}}) }}
+                                </div>
 
+                            </div>
+                            <div class="d-flex justify-content-end form-group align-items-center row">
+                                {{ form_label(formSearch.dateFin, null, {'attr': {'class': 'col-sm-2 col-form-label'}} ) }}
+                                <div class="col-sm-10">
+                                    {{ form_widget(formSearch.dateFin, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {# 2ème partie #}
+                    <div class="col-5">
+                        <div class="form-group">
+                            {{ form_label(formSearch.orgaTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
+                            {{ form_widget(formSearch.orgaTri, {'attr': {'class': 'form-check'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(formSearch.inscritTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
+                            {{ form_widget(formSearch.inscritTri, {'attr': {'class': 'form-check'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(formSearch.nonInscritTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
+                            {{ form_widget(formSearch.nonInscritTri, {'attr': {'class': 'form-check'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(formSearch.passeTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
+                            {{ form_widget(formSearch.passeTri, {'attr': {'class': 'form-check'}}) }}
                         </div>
                     </div>
 
-                </div>
-
-                {# 2ème partie #}
-                <div class="col-6">
-                    <div class="form-group">
-                        {{ form_label(formSearch.orgaTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
-                        {{ form_widget(formSearch.orgaTri, {'attr': {'class': 'form-check'}}) }}
-                    </div>
-                    <div class="form-group">
-                        {{ form_label(formSearch.inscritTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
-                        {{ form_widget(formSearch.inscritTri, {'attr': {'class': 'form-check'}}) }}
-                    </div>
-                    <div class="form-group">
-                        {{ form_label(formSearch.nonInscritTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
-                        {{ form_widget(formSearch.nonInscritTri, {'attr': {'class': 'form-check'}}) }}
-                    </div>
-                    <div class="form-group">
-                        {{ form_label(formSearch.passeTri,null,{'label_attr': {'class': 'form-check-label'}}) }}
-                        {{ form_widget(formSearch.passeTri, {'attr': {'class': 'form-check'}}) }}
+                    {# 3ème partie #}
+                    <div  class="d-flex justify-content-center col-12">
+                        <div class="form-group">
+                            {{ form_widget(formSearch.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+                        </div>
                     </div>
                 </div>
 
-                {# 3ème partie #}
-                <div  class="d-flex justify-content-center col-12">
-                    <div class="form-group">
-                        {{ form_widget(formSearch.submit, {'attr': {'class': 'btn btn-primary'}}) }}
-                    </div>
+
+                {{ form_end(formSearch) }}
                 </div>
-            </div>
+        </fieldset>
+        <div>
 
-
-            {{ form_end(formSearch) }}
-        </div>
-    <div>
         <h3>Liste des sorties</h3>
         <div class="mt-3 overflow-auto text-left" style="height: 300px;">
-            <table class="table table-hover">
+            <table class="table table-primary table-hover">
                 <thead>
-                <tr class="table-active">
+                <tr class="table-primary">
                     <th scope="col">Nom de la sortie</th>
                     <th scope="col">Date de la sortie</th>
                     <th scope="col">Clôture</th>
@@ -104,12 +105,19 @@
                 </thead>
                 <tbody>
                 {% for sortie in sorties %}
-                    <tr class="table-light">
+                    <tr class="table-light text-dark">
                         <th>{{ sortie.nom }}</th>
                         <th>{{ sortie.dateHeureDebut|format_datetime('short','short',locale='fr') }}</th>
                         <th>{{ sortie.dateLimiteInscription|format_datetime('short', 'none',locale='fr') }}</th>
                         <th>{{ sortie.participants|length }}/ {{ sortie.nbInscriptionMax }}</th>
-                        <th>{{ sortie.etat.libelle }}</th>
+                        {% if sortie.participants|length == sortie.nbInscriptionMax and sortie.etat.libelle == 'Ouverte' %}
+                            <th>Complet</th>
+                        {% elseif date('now') > date(sortie.dateLimiteInscription) and sortie.etat.libelle == 'Ouverte' %}
+                            <th>Clôturée</th>
+                        {% else %}
+                            <th>{{ sortie.etat.libelle }}</th>
+                        {% endif %}
+
                         {% if app.user in sortie.participants %}
                             <th>X</th>
                         {% else %}
@@ -124,11 +132,11 @@
                             {% if app.user %}
                                 {% if sortie.etat.libelle == 'Ouverte'  %}
                                     <a href="{{ path('sortie_detailSortie', {'id': sortie.getId()}) }}">Afficher</a>
-                                    {% if app.user in sortie.participants %}
+                                    {% if app.user in sortie.participants and date('now') <= date(sortie.dateLimiteInscription)%}
                                         - <a href="{{ url('sortie_sedesister', {'id': sortie.getId()}) }}">Se désister</a>
                                     {% elseif app.user == sortie.organisateur  %}
                                         - <a href="{{ path('sortie_annulerSortie',{'id': sortie.getId()}) }}">Annuler</a>
-                                    {% elseif sortie.nbInscriptionMax > sortie.participants|length %}
+                                    {% elseif sortie.nbInscriptionMax > sortie.participants|length and date('now') <= date(sortie.dateLimiteInscription)%}
                                         - <a href="{{ url('sortie_sinscrire', {'id': sortie.getId()}) }}">S'inscrire</a>
                                     {% endif %}
                                 {% elseif sortie.etat.libelle == 'Créée' and app.user == sortie.organisateur %}

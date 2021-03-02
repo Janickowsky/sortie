@@ -6,6 +6,17 @@
 
     {% form_theme formSortie 'bootstrap_4_layout.html.twig' %}
 
+    {% for message in app.flashes('success') %}
+        <div class="d-flex alert alert-primary justify-content-center">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('errors') %}
+        <div class="d-flex alert alert-danger justify-content-center">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     <h1>Créer une sortie</h1>
 
     {{  form_start(formSortie) }}
