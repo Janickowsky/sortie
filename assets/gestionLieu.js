@@ -3,6 +3,11 @@ window.onload = init;
 function init(){
     jQuery("#sortie_ville").on("change", recuplieu);
     jQuery("#sortie_lieu").on("change", modifLieu);
+    //jQuery("#addLieu").on("click",afficherModal);
+}
+
+function afficherModal(){
+    jQuery("#myModal").show();
 }
 
 function recuplieu(lieu){
