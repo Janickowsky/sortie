@@ -17,96 +17,73 @@
         </div>
     {% endfor %}
 
-
-    {# titre #}
-    <div class="d-flex justify-content-center mt-2 mb-2">
-        <h1>Créer une sortie</h1>
-    </div>
-
-    {# Container #}
-    <div class="container d-flex flex-wrap">
-
-        {# 1ère partie #}
-        <div class="col-6">
-            {{ form_start(formSortie) }}
-            <div class="d-flex justify-content-start form-group align-items-center row">
-                {{ form_label(formSortie.nom, null,{'label_attr': {'class': 'col-sm-2 form-check-label'}}) }}
-                <div class="col-sm-5">
-                    {{ form_widget(formSortie.nom, {'attr': {'class': 'form-control'}}) }}
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-start form-group align-items-center row">
-                {{ form_label(formSortie.dateHeureDebut, null, {'attr': {'class': 'col-sm-2 col-form-label'}}) }}
-                <div class="col-sm-5">
-                    {{ form_widget(formSortie.dateHeureDebut, {'attr': {'class': 'form-control'}}) }}
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-start form-group align-items-center row">
-                {{ form_label(formSortie.dateLimiteInscription, null, {'attr': {'class': 'col-sm-2 col-form-label'}}) }}
-                <div class="col-sm-5">
-                    {{ form_widget(formSortie.dateLimiteInscription, {'attr': {'class': 'form-control'}}) }}
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-start form-group align-items-center row">
-                {{ form_label(formSortie.nbInscriptionMax, null,{'label_attr': {'class': 'col-sm-2 form-check-label'}}) }}
-                <div class="col-sm-5">
-                    {{ form_widget(formSortie.nbInscriptionMax, {'attr': {'class': 'form-control'}}) }}
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-start form-group align-items-center row">
-                {{ form_label(formSortie.duree, null,{'label_attr': {'class': 'col-sm-2 form-check-label'}}) }}
-                <div class="col-sm-5">
-                    {{ form_widget(formSortie.duree, {'attr': {'class': 'form-control'}}) }}
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-start form-group align-items-center row">
-                {{ form_label(formSortie.infosSortie, null,{'label_attr': {'class': 'col-sm-2 form-check-label'}}) }}
-                <div class="col-sm-5">
-                    {{ form_widget(formSortie.infosSortie, {'attr': {'class': 'form-control'}}) }}
-                </div>
-            </div>
+    <div class="mt-4">
+        {# titre #}
+        <div class="d-flex justify-content-center mb-1">
+            <h1>Créer une sortie</h1>
         </div>
-        {# 2ème partie #}
-        <div class="col-6">
-            <div class="d-flex justify-content-start form-group align-items-center row">
-                {{ form_label(formSortie.ville, null,{'label_attr': {'class': 'col-sm-1 form-check-label'}}) }}
-                <div class="col-sm-5">
-                    {{ form_widget(formSortie.ville, {'attr': {'class': 'form-control'}}) }}
+        <div class="container px-4">
+            {{ form_start(formSortie,{'attr': {'class': 'row gx-3'}}) }}
+                <div class="col-6">
+                    <div class="form-group">
+                        {{ form_label(formSortie.nom, null,{'label_attr': {'class': 'form-check-label'}}) }}
+                        {{ form_widget(formSortie.nom, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(formSortie.dateHeureDebut, null,{'label_attr': {'class': 'form-check-label'}}) }}
+                        {{ form_widget(formSortie.dateHeureDebut, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(formSortie.dateLimiteInscription, null,{'label_attr': {'class': 'form-check-label'}}) }}
+                        {{ form_widget(formSortie.dateLimiteInscription, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(formSortie.nbInscriptionMax, null,{'label_attr': {'class': 'form-check-label'}}) }}
+                        {{ form_widget(formSortie.nbInscriptionMax, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(formSortie.duree, null,{'label_attr': {'class': 'form-check-label'}}) }}
+                        {{ form_widget(formSortie.duree, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(formSortie.infosSortie, null,{'label_attr': {'class': 'form-check-label'}}) }}
+                        {{ form_widget(formSortie.infosSortie, {'attr': {'class': 'form-control'}}) }}
+                    </div>
                 </div>
-            </div>
-
-            <div class="d-flex justify-content-start form-group align-items-center row">
-                {{ form_label(formSortie.lieu, null,{'label_attr': {'class': 'col-sm-1 form-check-label'}}) }}
-                <div class="col-sm-5">
-                    {{ form_widget(formSortie.lieu, {'attr': {'class': 'form-control'}}) }}
+                <div class="col-4">
+                    <div class="form-group">
+                        {{ form_label(formSortie.ville, null,{'label_attr': {'class': 'form-check-label'}}) }}
+                        {{ form_widget(formSortie.ville, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="d-flex align-items-center row">
+                        <div class="form-group col-10">
+                            {{ form_label(formSortie.lieu, null,{'label_attr': {'class': 'form-check-label'}}) }}
+                            {{ form_widget(formSortie.lieu, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="col-2 pt-2 pl-0">
+                            <a class="btn btn-primary rounded-circle" type="button" id="add" href="{{ path('lieu_listeLieux') }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="form-group" id="monLieuRue">
+                    </div>
+                    <div class="form-group" id="monLieuCodePostal">
+                    </div>
+                    <div class="form-group" id="monLieuLat">
+                    </div>
+                    <div class="form-group" id="monLieuLong">
+                    </div>
                 </div>
-                <a class="btn btn-primary rounded-circle" type="button" id="add" href="{{ path('lieu_listeLieux') }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                    </svg></a>
-            </div>
+                <div class="form-group d-flex justify-content-center mt-4">
+                    <input class="btn btn-primary mr-2" type="submit" id="save" name="save" value="Envoyer">
+                    <input class="btn btn-primary mr-2" type="submit" id="publish" name="publish" value="Publier la sortie">
+                    <a class="btn btn-primary" type="button" id="back" href="{{ url('home_home') }}">Annuler</a>
+                </div>
+            {{ form_end(formSortie) }}
 
 
-
-            <div id="monLieu"></div>
-        </div>
-
-    </div>
-    {# 3ème partie : buttons#}
-    <div class="container mt-4">
-        <div class="form-group d-flex justify-content-center">
-            <input class="btn btn-primary mr-2" type="submit" id="save" name="save" value="Envoyer">
-            <input class="btn btn-primary mr-2" type="submit" id="publish" name="publish" value="Publier la sortie">
-            <a class="btn btn-primary" type="button" id="back" href="{{ url('home_home') }}">Annuler</a>
         </div>
     </div>
-
-
-        {{  form_end(formSortie) }}
-
 
 {% endblock %}

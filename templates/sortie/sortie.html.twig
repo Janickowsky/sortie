@@ -5,18 +5,18 @@
 {% block body %}
 
     {% for message in app.flashes('success') %}
-        <div class="d-flex alert alert-info justify-content-center">
+        <div class="d-flex alert alert-info justify-content-center mt-2">
             {{ message }}
         </div>
     {% endfor %}
     {% for message in app.flashes('errors') %}
-        <div class="d-flex alert alert-danger justify-content-center">
+        <div class="d-flex alert alert-danger justify-content-center mt-2">
             {{ message }}
         </div>
     {% endfor %}
 
         {# Filtre #}
-        <div class="mb-3 mt-5">
+        <div class="mb-3 mt-3">
             <fieldset class="border border-primary rounded">
             {# Partie Titre filtre #}
                 <legend class="text-left ml-2 pl-3" style="width:25%"><h3>Filtrer les sorties</h3></legend>
