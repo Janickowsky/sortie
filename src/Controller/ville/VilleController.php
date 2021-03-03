@@ -6,7 +6,7 @@ namespace App\Controller\ville;
 
 
 use App\Entity\Ville;
-use App\Form\CreateVilleType;
+use App\Form\VilleType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,21 +29,21 @@ class VilleController extends AbstractController{
     }
 
     /**
-     * @Route(name="creerVille", path="/creerville", methods={"GET", "POST"})
+     * @Route(name="ajouterVille", path="/ajouterville", methods={"GET", "POST"})
      */
-    public function creerVille(Request $request, EntityManagerInterface $entityManager){
+    public function ajouterVille(Request $request, EntityManagerInterface $entityManager){
         $ville = new Ville();
-        $formCreateVille = $this->createForm(CreateVilleType::class, $ville);
-        $formCreateVille->handleRequest($request);
+        $formVille = $this->createForm(VilleType::class, $ville);
+        $formVille->handleRequest($request);
 
-        if($formCreateVille->isSubmitted() && $formCreateVille->isValid()){
+        if($formVille->isSubmitted() && $formVille->isValid()){
 
             $entityManager->persist($ville);
             $entityManager->flush();
             $this->addFlash('success',"Votre ville" .$ville->getNom(). " a bien été ajoutée");
             return $this->redirectToRoute('ville_listeVille');
         }
-        return $this->render("ville/creerVille.html.twig", ["formCreateVille" => $formCreateVille->createView()]);
+        return $this->render("ville/creerVille.html.twig", ["formVille" => $formVille->createView()]);
     }
 
     /**
@@ -59,8 +59,24 @@ class VilleController extends AbstractController{
         return  $this->redirectToRoute('ville_listeVille');
     }
 
+    /**
+     * @Route(name="modifierVille", path="/modifierville-{id}", requirements={"id":"\d+"}, methods={"GET", "POST"})
+     */
     public function modifierVille(Request $request, EntityManagerInterface $entityManager){
         $ville = $entityManager->getRepository(Ville::class)->getVilleById($request->get('id'));
 
+        $formVille = $this->createForm(VilleType::class, $ville);
+        $formVille->handleRequest($request);
+
+        if($formVille->isSubmitted() && $formVille->isValid()) {
+
+            $entityManager->persist($ville);
+            $entityManager->flush();
+
+            $this->addFlash('success', "La ville " . $ville->getNom() . " a bien été modifiée");
+
+            return $this->redirectToRoute('ville_listeVille', ['id' => $ville->getId()]);
+        }
+        return $this->render("ville/modifierVille.html.twig", ["formVille" => $formVille->createView()]);
     }
 }

@@ -1,12 +1,22 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-
-    <div class="d-flex justify-content-center">
-        <h1>Gérer les sites</h1>
-    </div>
-
-    <div class="d-flex">
+    <div class="container">
+        {% for message in app.flashes('success') %}
+            <div class="d-flex alert alert-info justify-content-center">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('errors') %}
+            <div class="d-flex alert alert-danger justify-content-center">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <div class="d-flex justify-content-center">
+            <h1>Gérer les sites</h1>
+        </div>
+        {#
+        <div class="d-flex">
         <h4>Filtrer les sites</h4>
     </div>
 
@@ -21,28 +31,32 @@
             </button>
         </div>
     </div>
-    <div class="mt-5 overflow-auto text-left" style="height: 300px;">
-        <table class="table table-hover">
-            <thead>
-            <tr class="table-active">
-                <th scope="col">Ville</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for site in sites %}
-                <tr class="table-light">
-                    <th>{{ site.nom }}</th>
-                    <th>Modifier - Supprimer</th>
+        #}
+
+        <div class="mt-5 overflow-auto text-left">
+            <table class="table table-hover">
+                <thead>
+                <tr class="table-active">
+                    <th scope="col">Ville</th>
+                    <th scope="col">Actions</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for site in sites %}
+                    <tr class="table-light">
+                        <th>{{ site.nom }}</th>
+                        <th>
+                            <a href="{{ path('site_modifierSite', {'id': site.getId()}) }}">Modifier</a>
+                            - <a href="{{ path('site_supprimerSite', {'id': site.getId()}) }}">Supprimer</a>
+                        </th>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <a type="button" class="btn btn-primary" href="{{ path('site_ajouterSite') }}">Ajouter</a>
+        </div>
     </div>
-
-    <button class="btn btn-primary" >
-        <a href="{{ path('home_home') }}" style="color: white">Ajouter</a>
-    </button>
-
 
 {% endblock%}

@@ -1,67 +1,66 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
+    <div class="container">
+        {% for message in app.flashes('success') %}
+            <div class="d-flex alert alert-info justify-content-center">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('errors') %}
+            <div class="d-flex alert alert-danger justify-content-center">
+                {{ message }}
+            </div>
+        {% endfor %}
 
-    {% for message in app.flashes('success') %}
-        <div class="d-flex alert alert-info justify-content-center">
-            {{ message }}
+        <div class="d-flex justify-content-center">
+            <h1>Gérer les villes</h1>
         </div>
-    {% endfor %}
-    {% for message in app.flashes('errors') %}
-        <div class="d-flex alert alert-danger justify-content-center">
-            {{ message }}
+
+
+        {#
+        <div class="d-flex">
+            <h4>Filtrer les villes</h4>
         </div>
-    {% endfor %}
-
-    <div class="d-flex justify-content-center">
-        <h1>Gérer les villes</h1>
-    </div>
-
-
-    {#
-    <div class="d-flex">
-        <h4>Filtrer les villes</h4>
-    </div>
-    <div class="d-flex justify-content">
-       <div class="form-group col-6">
-           <label for="fld-name">Le nom contient :</label>
-           <p class="form-control" id="nom">{{ "" }}</p>
+        <div class="d-flex justify-content">
+           <div class="form-group col-6">
+               <label for="fld-name">Le nom contient :</label>
+               <p class="form-control" id="nom">{{ "" }}</p>
+           </div>
+           <div>
+               <button class="btn btn-primary" >
+                   <a style="color: white">Rechercher</a>
+               </button>
+           </div>
        </div>
-       <div>
-           <button class="btn btn-primary" >
-               <a style="color: white">Rechercher</a>
-           </button>
-       </div>
-   </div>
-    #}
+        #}
 
-    <div class="mt-5 overflow-auto text-left" style="height: 300px;">
-        <table class="table table-hover">
-            <thead>
-            <tr class="table-active">
-                <th scope="col">Ville</th>
-                <th scope="col">Code postal</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for ville in villes %}
-                <tr class="table-light">
-                    <th>{{ ville.nom }}</th>
-                    <th>{{ ville.codePostal }}</th>
-                    <th>
-                        <a href="#">Modifier</a>
-                        - <a href="{{ path('ville_supprimerVille', {'id': ville.getId()}) }}">Supprimer</a>
-                    </th>
+        <div class="mt-5 overflow-auto text-left" style="height: 300px;">
+            <table class="table table-hover">
+                <thead>
+                <tr class="table-active">
+                    <th scope="col">Ville</th>
+                    <th scope="col">Code postal</th>
+                    <th scope="col">Actions</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for ville in villes %}
+                    <tr class="table-light">
+                        <th>{{ ville.nom }}</th>
+                        <th>{{ ville.codePostal }}</th>
+                        <th>
+                            <a href="{{ path('ville_modifierVille', {'id': ville.getId()}) }}">Modifier</a>
+                            - <a href="{{ path('ville_supprimerVille', {'id': ville.getId()}) }}">Supprimer</a>
+                        </th>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <a type="button" class="btn btn-primary" href="{{ path('ville_ajouterVille') }}">Ajouter</a>
+        </div>
     </div>
-
-    <button class="btn btn-primary" >
-        <a href="{{ path('ville_creerVille') }}" style="color: white">Ajouter</a>
-    </button>
-
 
 {% endblock%}

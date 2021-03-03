@@ -24,6 +24,14 @@ class SiteRepository extends ServiceEntityRepository
 
         return $req->getQuery()->getResult();
     }
+
+    public function getSiteById(int $id){
+        $req = $this->createQueryBuilder('site')
+            ->where('site.id = :id')
+            ->setParameter('id', $id);
+
+        return $req->getQuery()->getSingleResult();
+    }
     // /**
     //  * @return Site[] Returns an array of Site objects
     //  */
