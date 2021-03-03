@@ -40,22 +40,22 @@ function modifLieu(lieu){
             let rue =  jQuery('#monLieuRue');
             rue.empty();
             rue.append(jQuery('<label/>').attr('class','form-check-label').text("Rue"));
-            rue.append(jQuery('<input/>').attr('class','form-control').attr('id','rueInput').attr('readonly', true).val(lieu.rue));
+            rue.append(jQuery('<p/>').attr('class','form-control').text(lieu.rue));
 
             let cp =  jQuery('#monLieuCodePostal');
             cp.empty();
             cp.append(jQuery('<label/>').attr('class','form-check-label').text("Code postal"));
-            cp.append(jQuery('<input/>').attr('class','form-control').attr('id','rueInput').attr('readonly', true).val(lieu.ville.codePostal));
+            cp.append(jQuery('<p/>').attr('class','form-control').text(lieu.ville.codePostal));
 
             let lat = jQuery('#monLieuLat');
             lat.empty();
             lat.append(jQuery('<label/>').attr('class','form-check-label').text("Latitude"));
-            lat.append(jQuery('<input/>').attr('class','form-control').attr('id','rueInput').attr('readonly', true).val(lieu.latitude));
+            lat.append(jQuery('<p/>').attr('class','form-control').text(lieu.latitude));
 
             let long = jQuery('#monLieuLong');
             long.empty();
             long.append(jQuery('<label/>').attr('class','form-check-label').text("Longitude"));
-            long.append(jQuery('<input/>').attr('class','form-control').attr('id','rueInput').attr('readonly', true).val(lieu.longitude));
+            long.append(jQuery('<p/>').attr('class','form-control').text(lieu.longitude));
         })
         .fail(function(xhr, status, errorThrow){
             reject({

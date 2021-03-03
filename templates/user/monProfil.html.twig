@@ -4,19 +4,18 @@
 
 {% block body %}
     {% for message in app.flashes('success') %}
-        <div class="d-flex alert alert-primary justify-content-center">
+        <div class="d-flex alert alert-primary justify-content-center mt-2">
             {{ message }}
         </div>
     {% endfor %}
     {% for message in app.flashes('errors') %}
-        <div class="d-flex alert alert-danger justify-content-center">
+        <div class="d-flex alert alert-danger justify-content-center mt-2">
             {{ message }}
         </div>
     {% endfor %}
 
     {% form_theme UserType 'bootstrap_4_layout.html.twig' %}
     <div class="mt-4">
-        {# titre #}
         <div class="d-flex justify-content-center mb-1">
             <h1>Mon profil</h1>
         </div>

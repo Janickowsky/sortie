@@ -5,60 +5,47 @@
 {% block body %}
 
     {% form_theme formAnnuler 'bootstrap_4_layout.html.twig' %}
-
-    <div class="d-flex justify-content-center mb-2 mt-2">
-        <h1>Annuler une sortie</h1>
-    </div>
-
-    <div class="container">
-        <div class="form-group  d-flex justify-content-center row">
-            <label class="col-sm-2 col-form-label" for="exampleInputEmail1">Nom de la sortie</label>
-            <div class="col-sm-5">
-                <p class="form-control" id="nom">{{sortie.nom}}</p>
-            </div>
+    <div class="mt-4">
+        <div class="d-flex justify-content-center mb-1">
+            <h1>Annuler une sortie</h1>
         </div>
 
-        <div class="form-group  d-flex justify-content-center row">
-            <label class="col-sm-2 col-form-label" for="exampleInputEmail1">Date et heure de la sortie</label>
-            <div class="col-sm-5">
-                <p class="form-control" id="date_sortie">{{ sortie.dateHeureDebut|format_datetime('short', 'short', locale='fr')}}</p>
-            </div>
+        <div class="d-flex justify-content-center">
+            <div class="col-8">
+                <div class="form-group">
+                    <label class="form-check-label">Nom de la sortie</label>
+                    <p class="form-control">{{sortie.nom}}</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-check-label">Date et heure de la sortie</label>
+                    <p class="form-control">{{ sortie.dateHeureDebut|format_datetime('short', 'short', locale='fr')}}</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-check-label">Site organisateur</label>
+                    <p class="form-control">{{ sortie.campus.nom}}</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-check-label">Lieu</label>
+                    <p class="form-control">{{ sortie.lieu.nom}} {{ sortie.lieu.ville.codePostal}} {{ sortie.lieu.ville.nom}}</p>
+                </div>
+
+            {{ form_start(formAnnuler)}}
+                <div class="form-group">
+                    {{ form_label(formAnnuler.motif, null,{'label_attr': {'class': 'form-check-label'}}) }}
+                    {{ form_widget(formAnnuler.motif, {'attr': {'class': 'form-control'}}) }}
+
+                </div>
+
+                <div class="form-group d-flex justify-content-center mt-2">
+                {{ form_widget(formAnnuler.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+                <a class="btn btn-primary ml-2" type="button" href="{{ url('home_home') }}">Annuler</a>
+                </div>
+
+            {{ form_end(formAnnuler) }}
         </div>
-
-        <div class="form-group  d-flex justify-content-center row">
-            <label class="col-sm-2 col-form-label" for="exampleInputEmail1">Site organisateur</label>
-            <div class="col-sm-5">
-                <p class="form-control" id="date_sortie">{{ sortie.campus.nom}}</p>
-            </div>
-        </div>
-
-        <div class="form-group  d-flex justify-content-center row">
-            <label class="col-sm-2 col-form-label" for="exampleInputEmail1">Lieu</label>
-            <div class="col-sm-5">
-                <p class="form-control" id="lieu">{{ sortie.lieu.nom}} {{ sortie.lieu.ville.codePostal}} {{ sortie.lieu.ville.nom}}</p>
-
-            </div>
-        </div>
-
-
-        {{ form_start(formAnnuler)}}
-
-        <div class="d-flex justify-content-center form-group align-items-center row">
-            {{ form_label(formAnnuler.motif, null,{'label_attr': {'class': 'col-sm-2 form-check-label'}}) }}
-            <div class="col-sm-5">
-                {{ form_widget(formAnnuler.motif, {'attr': {'class': 'form-control'}}) }}
-            </div>
-        </div>
-
-        <div class="d-flex justify-content-center form-group">
-            {{ form_widget(formAnnuler.submit, {'attr': {'class': 'btn btn-primary'}}) }}
-            <a class="btn btn-primary ml-2" type="button" href="{{ url('home_home') }}">Annuler</a>
-        </div>
-
-
-
-        {{ form_end(formAnnuler) }}
-
 
     </div>
 

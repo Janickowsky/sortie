@@ -7,12 +7,12 @@
     {% form_theme formSortie 'bootstrap_4_layout.html.twig' %}
 
     {% for message in app.flashes('success') %}
-        <div class="d-flex alert alert-primary justify-content-center">
+        <div class="d-flex alert alert-primary justify-content-center mt-2">
             {{ message }}
         </div>
     {% endfor %}
     {% for message in app.flashes('errors') %}
-        <div class="d-flex alert alert-danger justify-content-center">
+        <div class="d-flex alert alert-danger justify-content-center mt-2">
             {{ message }}
         </div>
     {% endfor %}
@@ -50,7 +50,7 @@
                         {{ form_widget(formSortie.infosSortie, {'attr': {'class': 'form-control'}}) }}
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-6">
                     <div class="form-group">
                         {{ form_label(formSortie.ville, null,{'label_attr': {'class': 'form-check-label'}}) }}
                         {{ form_widget(formSortie.ville, {'attr': {'class': 'form-control'}}) }}
@@ -60,7 +60,7 @@
                             {{ form_label(formSortie.lieu, null,{'label_attr': {'class': 'form-check-label'}}) }}
                             {{ form_widget(formSortie.lieu, {'attr': {'class': 'form-control'}}) }}
                         </div>
-                        <div class="col-2 pt-2 pl-0">
+                        <div class="col-2 pt-2">
                             <a class="btn btn-primary rounded-circle" type="button" id="add" href="{{ path('lieu_listeLieux') }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                                     <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>
                             </a>
@@ -75,7 +75,7 @@
                     <div class="form-group" id="monLieuLong">
                     </div>
                 </div>
-                <div class="form-group d-flex justify-content-center mt-4">
+                <div class="col-12 d-flex justify-content-center form-group mt-4">
                     <input class="btn btn-primary mr-2" type="submit" id="save" name="save" value="Envoyer">
                     <input class="btn btn-primary mr-2" type="submit" id="publish" name="publish" value="Publier la sortie">
                     <a class="btn btn-primary" type="button" id="back" href="{{ url('home_home') }}">Annuler</a>
