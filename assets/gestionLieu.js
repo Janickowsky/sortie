@@ -3,11 +3,30 @@ window.onload = init;
 function init(){
     jQuery("#sortie_ville").on("change", recuplieu);
     jQuery("#sortie_lieu").on("change", modifLieu);
-    //jQuery("#addLieu").on("click",afficherModal);
+    jQuery("#enregistrer").on("click",ajouterLieu);
+    jQuery("#addLieu").on("click",afficherModal);
+    jQuery("#close").on("click",fermerModal);
 }
 
 function afficherModal(){
-    jQuery("#myModal").show();
+    jQuery.ajax({
+        url:'http://127.0.0.1:8000/api/lieu/api/villes',
+        method: 'GET',
+    })
+        .done(function(datas){
+            datas.forEach(function (ville){
+                jQuery('#villes').append(jQuery('<option>').attr('value',ville.id).text(ville.nom));
+            });
+            jQuery("#myModal").show();
+        })
+        .fail(function(xhr, status, errorThrow){
+            console.log(errorThrow);
+            console.log(status);
+            console.log(xhr);
+        });
+}
+function fermerModal(){
+    jQuery("#myModal").hide();
 }
 
 function recuplieu(lieu){
@@ -25,11 +44,9 @@ function recuplieu(lieu){
             modifLieu(lieu.id);
         })
         .fail(function(xhr, status, errorThrow){
-            reject({
-                xhr:xhr,
-                status : status,
-                error : errorThrow
-            });
+            console.log(errorThrow);
+            console.log(status);
+            console.log(xhr);
         });
 
 }
@@ -63,10 +80,47 @@ function modifLieu(lieu){
             long.append(jQuery('<p/>').attr('class','form-control').text(lieu.longitude));
         })
         .fail(function(xhr, status, errorThrow){
-            reject({
-                xhr:xhr,
-                status : status,
-                error : errorThrow
-            });
+            console.log(errorThrow);
+            console.log(status);
+            console.log(xhr);
         });
+}
+
+function ajouterLieu(){
+    let nomlieu = jQuery("#nom").val();
+    let ruelieu = jQuery("#rue").val();
+    let idVille = jQuery("#villes").val();
+    jQuery.ajax({
+        url : 'http://127.0.0.1:8000/api/lieu/api/ville-'+idVille,
+        method : 'GET',
+    })
+        .done(function(ville){
+            let lieu = {
+                'nom':nomlieu,
+                'rue':ruelieu,
+                'ville':ville,
+            };
+            console.log(JSON.stringify(lieu));
+            jQuery.ajax({
+                url : 'http://127.0.0.1:8000/api/lieu/api/lieu',
+                method : 'POST',
+                data : JSON.stringify(lieu)
+            })
+                .done(function(){
+                    jQuery("#myModal").hide();
+                })
+
+                .fail(function (xhr, status, errorThrow){
+                    console.log(errorThrow);
+                    console.log(status);
+                    console.log(xhr);
+                });
+        })
+
+        .fail(function (xhr, status, errorThrow){
+            console.log(errorThrow);
+            console.log(status);
+            console.log(xhr);
+        });
+
 }

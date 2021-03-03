@@ -18,6 +18,7 @@ class Ville
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer",options={"unsigned=true"}, name="id")
+     * @Groups({"api_ville"})
      *
      */
     private $id;
@@ -25,6 +26,7 @@ class Ville
     /**
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank(message="Veuillez saisir un nom")
+     * @Groups({"api_ville"})
      */
     private $nom;
 
@@ -33,7 +35,7 @@ class Ville
      * @Assert\NotBlank(message="Veuillez saisir un code postal")
      * @Assert\Length(min=5, minMessage="Un code postal doit contenir 5 caractères")
      * @Assert\Length(max=5, maxMessage="Un code postal doit contenir 5 caractères")
-     * @Groups({"api_lieu"})
+     * @Groups({"api_lieu","api_ville"})
      */
     private $codePostal;
 
