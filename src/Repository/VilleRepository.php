@@ -25,6 +25,14 @@ class VilleRepository extends ServiceEntityRepository
         return $req->getQuery()->getResult();
     }
 
+    public function getVilleById(int $id){
+        $req = $this->createQueryBuilder('ville')
+            ->where('ville.id = :id')
+            ->setParameter('id', $id);
+
+        return $req->getQuery()->getSingleResult();
+    }
+
     // /**
     //  * @return Ville[] Returns an array of Ville objects
     //  */

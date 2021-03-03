@@ -6,6 +6,7 @@ namespace App\Controller\ville;
 
 
 use App\Entity\Ville;
+use App\Form\CreateVilleType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,9 +29,38 @@ class VilleController extends AbstractController{
     }
 
     /**
-     * @Route(name="creerVille", path="/creerVille", methods={"GET", "POST"})
+     * @Route(name="creerVille", path="/creerville", methods={"GET", "POST"})
      */
     public function creerVille(Request $request, EntityManagerInterface $entityManager){
         $ville = new Ville();
+        $formCreateVille = $this->createForm(CreateVilleType::class, $ville);
+        $formCreateVille->handleRequest($request);
+
+        if($formCreateVille->isSubmitted() && $formCreateVille->isValid()){
+
+            $entityManager->persist($ville);
+            $entityManager->flush();
+            $this->addFlash('success',"Votre ville" .$ville->getNom(). " a bien été ajoutée");
+            return $this->redirectToRoute('ville_listeVille');
+        }
+        return $this->render("ville/creerVille.html.twig", ["formCreateVille" => $formCreateVille->createView()]);
+    }
+
+    /**
+     * @Route (name="supprimerVille", path="/supprimerville-{id}", requirements={"id":"\d+"}, methods={"GET"})
+     */
+    public function supprimerVille(Request $request, EntityManagerInterface $entityManager){
+        $ville = $entityManager->getRepository(Ville::class)->getVilleById($request->get('id'));
+        $entityManager->remove($ville);
+        $entityManager->flush();
+
+        $this->addFlash('success', "La sortie " .$ville->getNom(). " a bien été supprimée");
+
+        return  $this->redirectToRoute('ville_listeVille');
+    }
+
+    public function modifierVille(Request $request, EntityManagerInterface $entityManager){
+        $ville = $entityManager->getRepository(Ville::class)->getVilleById($request->get('id'));
+
     }
 }
