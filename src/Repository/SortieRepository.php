@@ -21,18 +21,59 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
-    public function getAllSortie($user){
-            $req = $this->createQueryBuilder('sortie');
+    public function getAllSortie($user, $datas = null){
+        $req = $this->createQueryBuilder('sortie');
 
         if($user){
             $req->innerJoin('sortie.campus','site')->addSelect('site');
             $req->innerJoin('sortie.etat','etat')->addSelect('etat');
             $req->leftJoin('sortie.participants','user')->addSelect('user');
-            $req->where('site.id = :idSite')->setParameter('idSite',$user->getCampus());
-            $req->andWhere("etat.libelle NOT LIKE 'Clôturée'");
-            $req->andWhere("etat.libelle LIKE 'Ouverte'");
-            $req->orWhere('sortie.organisateur = :idUser')->setParameter('idUser',$user->getId());
-            $req->orderBy('sortie.dateHeureDebut', 'desc');
+
+            $req->Where("etat.libelle NOT LIKE 'Clôturée'");
+
+            if(($datas['site'])){
+                $req->andWhere('sortie.campus = :Site')->setParameter('Site',$datas['site']);
+            }
+
+            if(($datas['nomSortie'])){
+                $req->andWhere('sortie.nom LIKE :nomSortie')->setParameter('nomSortie', '%'.$datas['nomSortie'].'%');
+            }
+
+            if($datas['dateDepart'] && $datas['dateFin']){
+                $req->andWhere('sortie.dateHeureDebut BETWEEN :dateDepart AND :dateFin')
+                    ->setParameter('dateDepart', $datas['dateDepart'])
+                    ->setParameter('dateFin', $datas['dateFin']->setTime(23,59,00));
+            }
+
+
+           if($datas['orgaTri'] or $datas['passeTri'] or $datas['inscritTri'] or $datas['nonInscritTri']) {
+               if($datas['orgaTri']){
+                   $req->andWhere("sortie.organisateur = :user")->setParameter('user',$user);
+               }
+               if($datas['passeTri']){
+                   $req->andWhere("etat.libelle = 'Passée'");
+               }
+               if($datas['inscritTri']){
+                   $req->andWhere(":user MEMBER OF sortie.participants")->setParameter('user',$user);
+                   if($datas['nonInscritTri']){
+                       $req->orWhere(":user NOT MEMBER OF sortie.participants")->setParameter('user',$user);
+                       $req->andWhere("etat.libelle LIKE 'Ouverte'");
+                   }
+                   $req->andWhere("sortie.organisateur <> :user")->setParameter('user',$user);
+               }else{
+                   if($datas['nonInscritTri']){
+                       $req->andWhere(":user NOT MEMBER OF sortie.participants")->setParameter('user',$user);
+                       $req->andWhere("sortie.organisateur <> :user")->setParameter('user',$user);
+                       $req->andWhere("etat.libelle LIKE 'Ouverte'");
+                   }
+               }
+           }else{
+               $req->andWhere("etat.libelle LIKE 'Ouverte'");
+               $req->orWhere("etat.libelle LIKE 'Annulée'");
+           }
+           $req->orderBy('sortie.dateHeureDebut', 'desc');
+
+
         }
         return $req->getQuery()->getResult();
     }
@@ -46,51 +87,5 @@ class SortieRepository extends ServiceEntityRepository
             ->setParameter('id', $id);
 
         return $req->getQuery()->getSingleResult();
-    }
-
-    public function getSortieSearch($user, ?Site $site = null,
-                                    ?String $nomSortie = null,
-                                    ?\DateTime $dateDepart = null,
-                                    ?\DateTime $dateFin = null,
-                                    ?bool $orgaTri = false,
-                                    ?bool $inscritTri = false,
-                                    ?bool $nonInscritTri = false,
-                                    ?bool $passeTri= false
-    ){
-        $req = $this->createQueryBuilder('sortie')
-            ->innerJoin('sortie.etat', 'etat')->addSelect('etat')
-            ->innerJoin('sortie.campus', 'site')->addSelect('site')
-            ->innerjoin('sortie.participants', 'user')->addSelect('user');
-
-        if($orgaTri){
-            $req->andWhere("sortie.organisateur = :user")
-            ->setParameter('user',$user);
-        }
-        if($inscritTri){
-            $req->orWhere("user.id = :userId")
-                ->setParameter('userId',$user->getId());
-        }
-        if($nonInscritTri){
-            $req->orWhere("user.id != :userId")
-                ->setParameter('userId',$user->getId());
-        }
-        if($passeTri){
-            $req->andWhere("etat.libelle = 'Passée'");
-        }
-        if(!is_null($site)){
-            $req->andWhere('site.id = :idSite')->setParameter('idSite', $site);
-        }
-        if(!is_null($nomSortie)){
-            $req->andWhere('sortie.nom LIKE :nomSortie')->setParameter('nomSortie', '%'.$nomSortie.'%');
-        }
-        if(!is_null($dateDepart) && !is_null($dateFin)){
-            $req->andWhere('sortie.dateHeureDebut BETWEEN :dateDepart AND :dateFin')
-                ->setParameter('dateDepart', $dateDepart)
-                ->setParameter('dateFin', $dateFin->setTime(23,59,00));
-        }
-        $req->andwhere("etat.libelle != 'Clôturée'")
-            ->orderBy('sortie.dateHeureDebut', 'desc');
-
-        return $req->getQuery()->getResult();
     }
 }

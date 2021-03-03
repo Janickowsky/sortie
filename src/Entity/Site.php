@@ -42,7 +42,7 @@ class Site
 
     public function getId(): ?int
     {
-        return $this->idSite;
+        return $this->id;
     }
 
     public function getNom(): ?string
