@@ -31,7 +31,8 @@ class Ville
     /**
      * @ORM\Column(type="string", length=5, name="code_postal")
      * @Assert\NotBlank(message="Veuillez saisir un code postal")
-     * @Assert\EqualTo(value=5, message="le code postal doit faire 5 caractères")
+     * @Assert\Length(min=5, minMessage="Un code postal doit contenir 5 caractères")
+     * @Assert\Length(max=5, maxMessage="Un code postal doit contenir 5 caractères")
      * @Groups({"api_lieu"})
      */
     private $codePostal;

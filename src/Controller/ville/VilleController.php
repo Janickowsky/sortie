@@ -5,7 +5,10 @@ namespace App\Controller\ville;
 
 
 
+use App\Entity\Site;
 use App\Entity\Ville;
+use App\Form\SiteSearchType;
+use App\Form\VilleSearchType;
 use App\Form\VilleType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,13 +22,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class VilleController extends AbstractController{
 
     /**
-     * @Route(name="listeVille", path="/ville", methods={"GET"})
+     * @Route(name="listeVille", path="/ville", methods={"GET","POST"})
      */
     public function listeVille(Request $request, EntityManagerInterface $entityManager){
+        $formSearch = $this->createForm(VilleSearchType::class);
+        $formSearch->handleRequest($request);
 
-        $villes = $entityManager->getRepository(Ville::class)->getAllVille();
+        if($formSearch->isSubmitted() && $formSearch->isValid()){
+            $datas = $formSearch->getData();
+            $villes= $entityManager->getRepository(Ville::class)->getAllVille($datas);
+        }else{
+            $villes = $entityManager->getRepository(Ville::class)->getAllVille();
+        }
 
-        return $this->render("ville/ville.html.twig",["villes" => $villes]);
+        return $this->render("ville/ville.html.twig",["villes" => $villes, "formSearch" =>$formSearch->createView()]);
     }
 
     /**
@@ -40,7 +50,7 @@ class VilleController extends AbstractController{
 
             $entityManager->persist($ville);
             $entityManager->flush();
-            $this->addFlash('success',"Votre ville" .$ville->getNom(). " a bien été ajoutée");
+            $this->addFlash('success',"Votre ville " .$ville->getNom(). " a bien été ajoutée");
             return $this->redirectToRoute('ville_listeVille');
         }
         return $this->render("ville/creerVille.html.twig", ["formVille" => $formVille->createView()]);

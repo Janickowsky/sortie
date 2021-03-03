@@ -4,35 +4,31 @@
 
     {% form_theme formVille 'bootstrap_4_layout.html.twig' %}
 
-    <div class="container mt-2">
-        {{ form_start(formVille) }}
-        <div class="d-flex justify-content-center mt-4 mb-2">
+    <div class="mt-4">
+        <div class="d-flex justify-content-center mb-1">
             <h1>Ajouter une ville</h1>
         </div>
-
-        <div class="d-flex justify-content-center form-group align-items-center row">
-            {{ form_label(formVille.nom, null,{'label_attr': {'class': 'col-sm-2 form-check-label'}}) }}
-            <div class="col-sm-5">
+        <div class="d-flex justify-content-center">
+            {{ form_start(formVille,{'attr': {'class': 'col-4'}}) }}
+            <div class="form-group">
+                {{ form_label(formVille.nom, null,{'label_attr': {'class': 'form-check-label'}}) }}
                 {{ form_widget(formVille.nom, {'attr': {'class': 'form-control'}}) }}
             </div>
-        </div>
 
-        <div class="d-flex justify-content-center form-group align-items-center row">
-            {{ form_label(formVille.codePostal, null,{'label_attr': {'class': 'col-sm-2 form-check-label'}}) }}
-            <div class="col-sm-5">
+            <div class="form-group">
+                {{ form_label(formVille.codePostal, null,{'label_attr': {'class': 'form-check-label'}}) }}
                 {{ form_widget(formVille.codePostal, {'attr': {'class': 'form-control'}}) }}
             </div>
-        </div>
 
-        <div>
             <div class="d-flex form-group justify-content-center">
                 {{ form_widget(formVille.submit, {'attr': {'class': 'btn btn-primary'}}) }}
             </div>
+            {{ form_end(formVille) }}
         </div>
-
-        {{ form_end(formVille) }}
     </div>
 
 
 {% endblock %}
+
+
 

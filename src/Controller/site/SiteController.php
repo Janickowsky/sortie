@@ -6,8 +6,11 @@ namespace App\Controller\site;
 
 
 use App\Entity\Site;
+use App\Entity\Sortie;
 use App\Entity\Ville;
+use App\Form\SiteSearchType;
 use App\Form\SiteType;
+use App\Form\SortieSearchType;
 use App\Form\VilleType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,13 +25,20 @@ class SiteController extends AbstractController{
 
 
     /**
-     * @Route(name="listeSite", path="/listesite", methods={"GET"})
+     * @Route(name="listeSite", path="/listesite", methods={"GET","POST"})
      */
-    public function listeVille(Request $request, EntityManagerInterface $entityManager){
+    public function listeSite(Request $request, EntityManagerInterface $entityManager){
+        $formSearch = $this->createForm(SiteSearchType::class);
+        $formSearch->handleRequest($request);
 
-        $sites = $entityManager->getRepository(Site::class)->getAllSite();
+        if($formSearch->isSubmitted() && $formSearch->isValid()){
+            $datas = $formSearch->getData();
+            $sites= $entityManager->getRepository(Site::class)->getAllSite($datas);
+        }else{
+            $sites = $entityManager->getRepository(Site::class)->getAllSite();
+        }
 
-        return $this->render("site/site.html.twig",["sites" => $sites]);
+        return $this->render("site/site.html.twig",["sites" => $sites, "formSearch" =>$formSearch->createView()]);
     }
 
     /**
@@ -43,7 +53,7 @@ class SiteController extends AbstractController{
 
             $entityManager->persist($site);
             $entityManager->flush();
-            $this->addFlash('success',"Votre site" .$site->getNom(). " a bien été ajouté");
+            $this->addFlash('success',"Votre site " .$site->getNom(). " a bien été ajouté");
             return $this->redirectToRoute('site_listeSite');
         }
         return $this->render("site/creerSite.html.twig", ["formSite" => $formSite->createView()]);
