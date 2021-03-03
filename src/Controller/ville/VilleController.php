@@ -17,7 +17,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class VilleController extends AbstractController{
 
-
     /**
      * @Route(name="listeVille", path="/ville", methods={"GET"})
      */
@@ -26,5 +25,12 @@ class VilleController extends AbstractController{
         $villes = $entityManager->getRepository(Ville::class)->getAllVille();
 
         return $this->render("ville/ville.html.twig",["villes" => $villes]);
+    }
+
+    /**
+     * @Route(name="creerVille", path="/creerVille, methods={"GET", "POST"})
+     */
+    public function creerVille(Request $request, EntityManagerInterface $entityManager){
+        $ville = new Ville();
     }
 }

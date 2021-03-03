@@ -15,51 +15,79 @@
     {% endfor %}
 
     {% form_theme UserType 'bootstrap_4_layout.html.twig' %}
+    <div class="container mt-4">
 
+        <div class="d-flex justify-content-center mb-1">
+            <h1>Mon profil</h1>
+        </div>
     {{ form_start(UserType)}}
+        <div class="d-flex justify-content-center form-group align-items-center row">
+            {{ form_label(UserType.pseudo, null,{'label_attr': {'class': 'col-sm-1 form-check-label'}}) }}
+            <div class="col-sm-5">
+                {{ form_widget(UserType.pseudo, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
 
-    <div class="form-group">
-        {{ form_label(UserType.pseudo) }}
-        {{ form_widget(UserType.pseudo, {'attr': {'class': 'form-control'}}) }}
+        <div class="d-flex justify-content-center form-group align-items-center row">
+            {{ form_label(UserType.nom, null,{'label_attr': {'class': 'col-sm-1 form-check-label'}}) }}
+            <div class="col-sm-5">
+                {{ form_widget(UserType.nom, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center form-group align-items-center row">
+            {{ form_label(UserType.prenom, null,{'label_attr': {'class': 'col-sm-1 form-check-label'}}) }}
+            <div class="col-sm-5">
+                {{ form_widget(UserType.prenom, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center form-group align-items-center row">
+            {{ form_label(UserType.telephone, null,{'label_attr': {'class': 'col-sm-1 form-check-label'}}) }}
+            <div class="col-sm-5">
+                {{ form_widget(UserType.telephone, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center form-group align-items-center row">
+            {{ form_label(UserType.email, null,{'label_attr': {'class': 'col-sm-1 form-check-label'}}) }}
+            <div class="col-sm-5">
+                {{ form_widget(UserType.email, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="">
+            <div class="d-flex justify-content-center form-group align-items-center row">
+                {{ form_label(UserType.plainPassword.first, null,{'label_attr': {'class': 'col-sm-1 form-check-label'}}) }}
+                <div class="col-sm-5">
+                    {{ form_widget(UserType.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="d-flex justify-content-center form-group align-items-center row">
+                {{ form_label(UserType.plainPassword.second, null,{'label_attr': {'class': 'col-sm-1 form-check-label'}}) }}
+                <div class="col-sm-5 ml-1">
+                    {{ form_widget(UserType.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center form-group align-items-center row">
+            {{ form_label(UserType.campus, null,{'label_attr': {'class': 'col-sm-1 form-check-label'}}) }}
+            <div class="col-sm-5 ml-1">
+                {{ form_widget(UserType.campus, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            {{ form_widget(UserType.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+            <button class="btn btn-primary ml-4" >
+                <a href="{{ path('home_home') }}" style="color: white">Annuler</a>
+            </button>
+        </div>
+
+
+        {{ form_end(UserType) }}
     </div>
 
-    <div class="form-group">
-        {{ form_label(UserType.nom) }}
-        {{ form_widget(UserType.nom, {'attr': {'class': 'form-control'}}) }}
-    </div>
-
-    <div class="form-group">
-        {{ form_label(UserType.prenom) }}
-        {{ form_widget(UserType.prenom, {'attr': {'class': 'form-control'}}) }}
-    </div>
-
-    <div class="form-group">
-        {{ form_label(UserType.telephone) }}
-        {{ form_widget(UserType.telephone, {'attr': {'class': 'form-control'}}) }}
-    </div>
-
-    <div class="form-group">
-        {{ form_label(UserType.email) }}
-        {{ form_widget(UserType.email, {'attr': {'class': 'form-control'}}) }}
-    </div>
-
-    <div class="form-group">
-        {{ form_label(UserType.plainPassword.first)}}
-        {{ form_widget(UserType.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
-        {{ form_label(UserType.plainPassword.second)}}
-        {{ form_widget(UserType.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
-    </div>
-
-    <div class="form-group">
-        {{ form_label(UserType.campus)}}
-        {{ form_widget(UserType.campus, {'attr': {'class': 'form-control'}}) }}
-    </div>
-
-    {{ form_widget(UserType.submit, {'attr': {'class': 'btn btn-primary'}}) }}
-    <button class="btn btn-primary" >
-        <a href="{{ path('home_home') }}" style="color: white">Annuler</a>
-    </button>
-
-    {{ form_end(UserType) }}
 
 {% endblock %}

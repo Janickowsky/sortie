@@ -22,31 +22,31 @@ class UserType extends AbstractType
     {
 
         $builder->add('pseudo', TextType::class,[
-            'label' =>'Pseudo :',
+            'label' =>'Pseudo',
             'required' => true,
             'trim' => true,
         ]);
 
         $builder->add('nom', TextType::class,[
-            'label' =>'Nom :',
+            'label' =>'Nom',
             'required' => true,
             'trim' => true,
         ]);
 
         $builder->add('prenom',TextType::class, [
-            'label' => 'Prénom :',
+            'label' => 'Prénom',
             'required' => true,
             'trim' => true
         ]);
 
         $builder->add('telephone',TelType::class, [
-            'label' => 'Téléphone :',
+            'label' => 'Téléphone',
             'required' => false,
             'trim' => true
         ]);
 
         $builder->add('email',EmailType::class, [
-            'label' => 'Email :',
+            'label' => 'Email',
             'required' => true,
             'trim' => true,
         ]);
@@ -56,12 +56,12 @@ class UserType extends AbstractType
             'invalid_message' => 'Password non conforme !',
             'options' => ['attr' => ['class' => 'password-field']],
             'required' => false,
-            'first_options'  => ['label' => 'Password :'],
-            'second_options' => ['label' => 'Confirmation :'],
+            'first_options'  => ['label' => 'Password'],
+            'second_options' => ['label' => 'Confirmation'],
         ]);
 
         $builder->add('campus',EntityType::class, [
-            'label' => 'Site de rattachement :',
+            'label' => 'Site de rattachement',
             'class' => Site::class,
             'query_builder' => function(EntityRepository $er){
             return $er->createQueryBuilder('site')

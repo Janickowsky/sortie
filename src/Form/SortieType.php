@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
@@ -27,47 +28,45 @@ class SortieType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('nom', TextType::class, [
-            'label' => 'Nom de la sortie:',
+            'label' => 'Nom de la sortie',
             'trim' => true,
             'required' => true,
         ]);
 
-        $builder->add('dateHeureDebut', DateTimeType::class, [
-            'label' => 'Date et heure de la sortie:',
+        $builder->add('dateHeureDebut', DateType::class, [
+            'label' => 'Date et heure de la sortie',
             'trim' => true,
             'required' => true,
-            'date_widget' => 'single_text',
-            'time_widget' => 'single_text',
+            'widget' => 'single_text',
         ]);
 
-        $builder->add('dateLimiteInscription', DateTimeType::class, [
-            'label' => 'Date limite d\'inscription:',
+        $builder->add('dateLimiteInscription', DateType::class, [
+            'label' => 'Date limite d\'inscription',
             'trim' => true,
             'required' => true,
-            'date_widget' => 'single_text',
-            'time_widget' => 'single_text',
+            'widget' => 'single_text',
         ]);
 
         $builder->add('nbInscriptionMax', NumberType::class, [
-            'label' => 'Nombre de places:',
+            'label' => 'Nombre de places',
             'trim' => true,
             'required' => true,
         ]);
 
         $builder->add('duree', IntegerType::class, [
-            'label' => 'Duree (en minutes):',
+            'label' => 'Duree (en minutes)',
             'trim' => true,
             'required' => true,
         ]);
 
         $builder->add('infosSortie', TextareaType::class, [
-            'label' => 'Description et infos:',
+            'label' => 'Description et infos',
             'trim' => true,
             'required' => true,
         ]);
 
         $builder->add('ville', EntityType::class, [
-            'label' => 'Ville:',
+            'label' => 'Ville',
             'trim' => true,
             'mapped' => false,
             'required' => true,
@@ -83,7 +82,7 @@ class SortieType extends AbstractType
 
 
         $builder->add('lieu', EntityType::class, [
-            'label' => 'Lieu:',
+            'label' => 'Lieu',
             'trim' => true,
             'required' => true,
             'class' => Lieu::class,

@@ -6,21 +6,24 @@
         <h1>Gérer les villes</h1>
     </div>
 
+
+    {#
     <div class="d-flex">
         <h4>Filtrer les villes</h4>
     </div>
-
     <div class="d-flex justify-content">
-        <div class="form-group col-6">
-            <label for="fld-name">Le nom contient :</label>
-            <p class="form-control" id="nom">{{ "" }}</p>
-        </div>
-        <div>
-            <button class="btn btn-primary" >
-                <a style="color: white">Rechercher</a>
-            </button>
-        </div>
-    </div>
+       <div class="form-group col-6">
+           <label for="fld-name">Le nom contient :</label>
+           <p class="form-control" id="nom">{{ "" }}</p>
+       </div>
+       <div>
+           <button class="btn btn-primary" >
+               <a style="color: white">Rechercher</a>
+           </button>
+       </div>
+   </div>
+    #}
+
     <div class="mt-5 overflow-auto text-left" style="height: 300px;">
         <table class="table table-hover">
             <thead>
@@ -43,7 +46,7 @@
     </div>
 
     <button class="btn btn-primary" >
-        <a href="{{ path('home_home') }}" style="color: white">Ajouter</a>
+        <a href="{{ path('ville_creerVille') }}" style="color: white">Ajouter</a>
     </button>
 
 
