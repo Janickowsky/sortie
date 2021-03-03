@@ -28,7 +28,7 @@ class VilleController extends AbstractController{
     }
 
     /**
-     * @Route(name="creerVille", path="/creerVille, methods={"GET", "POST"})
+     * @Route(name="creerVille", path="/creerVille", methods={"GET", "POST"})
      */
     public function creerVille(Request $request, EntityManagerInterface $entityManager){
         $ville = new Ville();
