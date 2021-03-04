@@ -61,10 +61,16 @@ class VilleController extends AbstractController{
      */
     public function supprimerVille(Request $request, EntityManagerInterface $entityManager){
         $ville = $entityManager->getRepository(Ville::class)->getVilleById($request->get('id'));
-        $entityManager->remove($ville);
-        $entityManager->flush();
+        if(count($ville->getLieux()) > 0){
+            $this->addFlash('errors', "La sortie " .$ville->getNom(). " ne peut pas être supprimée");
+        }else{
+            $entityManager->remove($ville);
+            $entityManager->flush();
+            $this->addFlash('success', "La sortie " .$ville->getNom(). " a bien été supprimée");
+        }
 
-        $this->addFlash('success', "La sortie " .$ville->getNom(). " a bien été supprimée");
+
+
 
         return  $this->redirectToRoute('ville_listeVille');
     }

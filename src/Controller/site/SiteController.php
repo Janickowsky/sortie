@@ -64,10 +64,14 @@ class SiteController extends AbstractController{
      */
     public function supprimerSite(Request $request, EntityManagerInterface $entityManager){
         $site = $entityManager->getRepository(Site::class)->getSiteById($request->get('id'));
-        $entityManager->remove($site);
-        $entityManager->flush();
+        if(count($site->getSorties()) > 0){
+            $this->addFlash('errors', "Le site " .$site->getNom(). " ne peut pas être supprimé");
+        }else{
+            $entityManager->remove($site);
+            $entityManager->flush();
 
-        $this->addFlash('success', "Le site " .$site->getNom(). " a bien été supprimé");
+            $this->addFlash('success', "Le site " .$site->getNom(). " a bien été supprimé");
+        }
 
         return  $this->redirectToRoute('site_listeSite');
     }

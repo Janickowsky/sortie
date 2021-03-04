@@ -4,12 +4,12 @@
 
 {% block body %}
     {% for message in app.flashes('success') %}
-        <div class="d-flex alert alert-info justify-content-center">
+        <div class="d-flex alert alert-info justify-content-center mt-2">
             {{ message }}
         </div>
     {% endfor %}
     {% for message in app.flashes('errors') %}
-        <div class="d-flex alert alert-danger justify-content-center">
+        <div class="d-flex alert alert-danger justify-content-center mt-2">
             {{ message }}
         </div>
     {% endfor %}

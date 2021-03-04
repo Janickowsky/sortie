@@ -2,15 +2,15 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+        <meta name="viewport" content="width=device-width"/>
         <title>{% block title %}{% endblock %}</title>
+
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://bootswatch.com/4/minty/bootstrap.min.css">
         <link rel="icon" type="image/x-icon" href="{{ asset('build/images/favicon.png')}}">
 
         {{ encore_entry_script_tags('app') }}
-        {{ encore_entry_link_tags('app') }}
     </head>
     <body>
         <header>
@@ -22,15 +22,13 @@
                     <ul class="navbar-nav mr-auto">
                         {% if app.user %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown"
-                               href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                 {{  app.user.prenom }} {{ app.user.nom|slice(0, 1) }}
                             </a>
                             <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{ path('user_monProfil') }}">Mon Profil</a>
                                     {% if app.user and 'ROLE_ADMIN' in app.user.roles %}
-                                        <a class="dropdown-item" href="{{ path('ville_listeVille') }}">Villes</a>
-                                        <a class="dropdown-item" href="{{ path('site_listeSite') }}">Sites</a>
+                                        <a class="dropdown-item" href="{{ path('admin_index') }}">Administration</a>
                                     {% endif %}
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{ url('app_logout') }}">Se deconnecter</a>
