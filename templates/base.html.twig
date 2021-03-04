@@ -2,13 +2,15 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
         <title>{% block title %}{% endblock %}</title>
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://bootswatch.com/4/minty/bootstrap.min.css">
         <link rel="icon" type="image/x-icon" href="{{ asset('build/images/favicon.png')}}">
+
         {{ encore_entry_script_tags('app') }}
+        {{ encore_entry_link_tags('app') }}
     </head>
     <body>
         <header>
@@ -45,7 +47,7 @@
     </body>
     <footer class="mt-5 bg-primary fixed-bottom">
         <div class="container d-flex justify-content-center">
-            <p class="text-light font-weight-bold">&#169; | Janick Buisson, Benedicte Freulon, Mathieu Le Bouedec</p>
+            <p class="text-light">&#169; | Janick Buisson, Benedicte Freulon, Mathieu Le Bouedec</p>
         </div>
     </footer>
 </html>
