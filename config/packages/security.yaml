@@ -46,3 +46,4 @@ security:
         - { path: ^/lieu, roles: ROLE_USER }
         - { path: ^/site, roles: ROLE_ADMIN }
         - { path: ^/ville, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: ROLE_ADMIN }
