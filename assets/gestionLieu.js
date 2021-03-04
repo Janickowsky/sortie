@@ -2,20 +2,30 @@ window.onload = init;
 
 function init(){
     jQuery("#sortie_ville").on("change", recuplieu);
-    jQuery("#sortie_lieu").on("change", modifLieu);
+    jQuery("#sortie_lieu").on("change", modifLieu).on("load",initSelect());
     jQuery("#enregistrer").on("click",ajouterLieu);
     jQuery("#addLieu").on("click",afficherModal);
     jQuery("#close").on("click",fermerModal);
 }
+function initSelect(){
+    jQuery("#sortie_lieu").empty();
+}
 
 function afficherModal(){
+    jQuery('#villes').empty();
+
     jQuery.ajax({
         url:'http://127.0.0.1:8000/api/lieu/api/villes',
         method: 'GET',
     })
         .done(function(datas){
             datas.forEach(function (ville){
-                jQuery('#villes').append(jQuery('<option>').attr('value',ville.id).text(ville.nom));
+                let maVille = jQuery('#villes');
+                if(jQuery("#sortie_ville").val() == ville.id){
+                    maVille.append(jQuery('<option>').attr('selected','selected').attr('value',ville.id).text(ville.nom));
+                }else{
+                    maVille.append(jQuery('<option>').attr('value',ville.id).text(ville.nom));
+                }
             });
             jQuery("#myModal").show();
         })
@@ -38,10 +48,14 @@ function recuplieu(lieu){
         method: 'GET',
     })
         .done(function(datas){
-            datas.forEach(function (lieu){
-                jQuery('#sortie_lieu').append(jQuery('<option>').attr('value',lieu.id).text(lieu.nom));
+            datas.forEach(function (monLieu){
+                if(lieu.nom == monLieu.nom){
+                    jQuery('#sortie_lieu').append(jQuery('<option>').attr('selected','selected').attr('value',monLieu.id).text(monLieu.nom));
+                }else{
+                    jQuery('#sortie_lieu').append(jQuery('<option>').attr('value',monLieu.id).text(monLieu.nom));
+                }
             });
-            modifLieu(lieu.id);
+            modifLieu();
         })
         .fail(function(xhr, status, errorThrow){
             console.log(errorThrow);
@@ -51,7 +65,7 @@ function recuplieu(lieu){
 
 }
 
-function modifLieu(lieu){
+function modifLieu(){
     let idLieu = jQuery("#sortie_lieu").val();
 
     jQuery.ajax({
@@ -90,31 +104,21 @@ function ajouterLieu(){
     let nomlieu = jQuery("#nom").val();
     let ruelieu = jQuery("#rue").val();
     let idVille = jQuery("#villes").val();
-    jQuery.ajax({
-        url : 'http://127.0.0.1:8000/api/lieu/api/ville-'+idVille,
-        method : 'GET',
-    })
-        .done(function(ville){
-            let lieu = {
-                'nom':nomlieu,
-                'rue':ruelieu,
-                'ville':ville,
-            };
-            console.log(JSON.stringify(lieu));
-            jQuery.ajax({
-                url : 'http://127.0.0.1:8000/api/lieu/api/lieu',
-                method : 'POST',
-                data : JSON.stringify(lieu)
-            })
-                .done(function(){
-                    jQuery("#myModal").hide();
-                })
 
-                .fail(function (xhr, status, errorThrow){
-                    console.log(errorThrow);
-                    console.log(status);
-                    console.log(xhr);
-                });
+    let lieu = {
+        'nom':nomlieu,
+        'rue':ruelieu,
+        'idVille' : idVille,
+    };
+
+    jQuery.ajax({
+        url : 'http://127.0.0.1:8000/api/lieu/api/lieu',
+        method : 'POST',
+        data : JSON.stringify(lieu)
+    })
+        .done(function(){
+            jQuery("#myModal").hide();
+            recuplieu(lieu);
         })
 
         .fail(function (xhr, status, errorThrow){
@@ -122,5 +126,4 @@ function ajouterLieu(){
             console.log(status);
             console.log(xhr);
         });
-
 }

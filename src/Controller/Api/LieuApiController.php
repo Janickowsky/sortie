@@ -45,11 +45,16 @@ class LieuApiController extends AbstractController
     public function addLieu(VilleRepository $vr, SerializerInterface $serializer, Request $request,EntityManagerInterface $manager,ValidatorInterface $validator){
 
         if($request->isXmlHttpRequest()) {
-            $content = $request->getContent();
-            $lieu = $serializer->deserialize($content, Lieu::class, 'json');
 
+            $lieuJson = \json_decode($request->getContent());
 
-            //$lieu->setVille($ville);
+            $lieu = new Lieu();
+            $lieu->setNom($lieuJson->nom);
+            $lieu->setRue($lieuJson->rue);
+
+            $ville = $vr->getVilleById($lieuJson->idVille);
+
+            $lieu->setVille($ville);
             $lieu->setLongitude(-81.506485);
             $lieu->setLatitude(35.666156);
 
@@ -60,14 +65,16 @@ class LieuApiController extends AbstractController
             if (count($errors) === 0) {
                 $manager->persist($lieu);
                 $manager->flush();
+                $status = 200;
             } else {
                 $return['result'] = false;
                 foreach ($errors as $e) {
                     $return['errors'][] = $e->getMessage();
                 }
+                $status = 500;
             }
+            return new JsonResponse($return, $status);
         }
-        return new JsonResponse($return, 200);
     }
 
     /**
