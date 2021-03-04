@@ -53,6 +53,10 @@
                 {{ form_label(UserType.campus, null,{'label_attr': {'class': 'form-check-label'}}) }}
                 {{ form_widget(UserType.campus, {'attr': {'class': 'form-control'}}) }}
             </div>
+            <div class="form-group">
+                {{ form_label(UserType.image, null,{'label_attr': {'class': 'form-check-label'}}) }}
+                {{ form_widget(UserType.image, {'attr': {'class': 'form-control'}}) }}
+            </div>
             <div class="d-flex justify-content-center form-group">
                 {{ form_widget(UserType.submit, {'attr': {'class': 'btn btn-primary'}}) }}
                 <a type="button" class="btn btn-primary ml-4" href="{{ path('home_home') }}" style="color: white">Annuler</a>
@@ -60,6 +64,13 @@
             {{ form_end(UserType) }}
         </div>
     </div>
+
+    <script>
+        jQuery('#user_image').on('change', function (){
+            var fileName = jQuery(this).val();
+            jQuery(this).next('.custom-file-label').html(fileName);
+        });
+    </script>
 
 
 {% endblock %}

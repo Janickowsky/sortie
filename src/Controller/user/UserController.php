@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,6 +42,34 @@ class UserController extends AbstractController
             if (!empty($user->getPlainPassword())){
                 $user->setPassword($user->encodePassword($encoder));
             }
+
+            $image = $form->get('image')->getData();
+
+            if($image){
+                $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
+
+                try {
+                    $image->move(
+                        $this->getParameter('brochures_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('errors', 'Votre profil ne peut être modifié');
+                }
+
+                if($user->getImage() != null && file_exists( $this->getParameter('brochures_directory') . '/' . $user->getImage())){
+                    unlink($this->getParameter('brochures_directory') . '/' . $user->getImage());
+                }
+                $user->setImage($newFilename);
+            }
+
+
+            // updates the 'brochureFilename' property to store the PDF file name
+            // instead of its contents
+
 
             $em->persist($user);
             $em->flush();

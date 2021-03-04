@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -73,6 +74,11 @@ class UserType extends AbstractType
             'trim' => true,
         ]);
 
+        $builder->add('image', FileType::class,[
+            'label'=>'Ma photo',
+            'required'=>false,
+            'mapped'=>false
+        ]);
 
         $builder->add ('submit', SubmitType::class, [
             'label' => 'Enregistrer',
