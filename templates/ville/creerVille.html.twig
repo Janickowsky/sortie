@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Créer une ville{% endblock %}
+
 {% block body %}
-
     {% form_theme formVille 'bootstrap_4_layout.html.twig' %}
-
     <div class="mt-4">
         <div class="d-flex justify-content-center mb-1">
             <h1>Ajouter une ville</h1>
@@ -26,7 +26,6 @@
             {{ form_end(formVille) }}
         </div>
     </div>
-
 
 {% endblock %}
 
