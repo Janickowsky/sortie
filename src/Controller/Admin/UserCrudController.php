@@ -43,12 +43,14 @@ class UserCrudController extends AbstractCrudController implements EventSubscrib
         ];
     }
 
+    //Avec evenement
     public function addPass(BeforeEntityPersistedEvent $event){
         $user = $event->getEntityInstance();
         $user->setPlainPassword('test');
         $user->setPassword($user->encodePassword($this->encoder));
     }
 
+    //avec sucharge de methode
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if($entityInstance->getActif() == false && count($entityInstance->getSorties()) == 0 && count($entityInstance->getMesEvenements()) == 0){
