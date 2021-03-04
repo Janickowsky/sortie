@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class UserType extends AbstractType
 {
@@ -77,7 +78,19 @@ class UserType extends AbstractType
         $builder->add('image', FileType::class,[
             'label'=>'Ma photo',
             'required'=>false,
-            'mapped'=>false
+            'mapped'=>false,
+            'constraints'=> [
+        new File([
+            'maxSize' => '1024k',
+            'mimeTypes' => [
+                'image/jpeg',
+                'image/png',
+
+            ],
+            'mimeTypesMessage' => 'Format accepté JPEG ou PNG',
+        ])
+    ],
+
         ]);
 
         $builder->add ('submit', SubmitType::class, [
