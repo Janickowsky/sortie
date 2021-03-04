@@ -13,6 +13,10 @@ function initSelect(){
 
 function afficherModal(){
     jQuery('#villes').empty();
+    jQuery("#nom").css("border-color","#ced4da").val('');
+    jQuery("#rue").css("border-color","#ced4da").val('');
+    jQuery("#lblRue").remove();
+    jQuery("#lblNom").remove();
 
     jQuery.ajax({
         url:'http://127.0.0.1:8000/api/lieu/api/villes',
@@ -101,29 +105,41 @@ function modifLieu(){
 }
 
 function ajouterLieu(){
-    let nomlieu = jQuery("#nom").val();
-    let ruelieu = jQuery("#rue").val();
+    let nomlieu = jQuery("#nom").val().trim();
+    let ruelieu = jQuery("#rue").val().trim();
     let idVille = jQuery("#villes").val();
 
-    let lieu = {
-        'nom':nomlieu,
-        'rue':ruelieu,
-        'idVille' : idVille,
-    };
+    if((nomlieu === '' || nomlieu === null) || (ruelieu === '' || ruelieu === null)){
+        if(nomlieu === ''){
+            jQuery("#nom").css("border-color",'red');
+            jQuery('#divNom').append(jQuery('<label/>').attr('class','form-check-label').attr('id','lblNom').text("Le nom est obligatoire").css("color","red"));
+        }
+        if(ruelieu === ''){
+            jQuery("#rue").css("border-color",'red');
+            jQuery('#divRue').append(jQuery('<label/>').attr('class','form-check-label').attr('id','lblRue').text("L'adresse est obligatoire").css("color","red"));
+        }
+    }else {
 
-    jQuery.ajax({
-        url : 'http://127.0.0.1:8000/api/lieu/api/lieu',
-        method : 'POST',
-        data : JSON.stringify(lieu)
-    })
-        .done(function(){
-            jQuery("#myModal").hide();
-            recuplieu(lieu);
+        let lieu = {
+            'nom': nomlieu,
+            'rue': ruelieu,
+            'idVille': idVille,
+        };
+
+        jQuery.ajax({
+            url: 'http://127.0.0.1:8000/api/lieu/api/lieu',
+            method: 'POST',
+            data: JSON.stringify(lieu)
         })
+            .done(function () {
+                jQuery("#myModal").hide();
+                recuplieu(lieu);
+            })
 
-        .fail(function (xhr, status, errorThrow){
-            console.log(errorThrow);
-            console.log(status);
-            console.log(xhr);
-        });
+            .fail(function (xhr, status, errorThrow) {
+                console.log(errorThrow);
+                console.log(status);
+                console.log(xhr);
+            });
+    }
 }
