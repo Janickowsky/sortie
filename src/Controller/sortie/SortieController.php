@@ -25,6 +25,7 @@ class SortieController extends AbstractController{
     const ETAT_CREEE = 'Créée';
     const ETAT_ENCOURS = 'Activité en cours';
     const ETAT_ANNULEE = 'Annulée';
+    const ETAT_CLOTUREE = 'Clôturée';
 
     /**
      * @Route(name="listeSorties", path="/sorties", methods={"GET","POST"})
@@ -154,7 +155,7 @@ class SortieController extends AbstractController{
      */
     public function supprimerSorties(Request $request, EntityManagerInterface $entityManager){
         $sortie = $entityManager->getRepository(Sortie::class)->getSortieById($request->get('id'));
-        if($sortie->getOrganisateur() == $this->getUser()) {
+        if($sortie->getOrganisateur() == $this->getUser() && $sortie->getEtat() == self::ETAT_CLOTUREE) {
             $entityManager->remove($sortie);
             $entityManager->flush();
 

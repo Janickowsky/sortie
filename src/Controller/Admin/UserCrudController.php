@@ -23,12 +23,10 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserCrudController extends AbstractCrudController implements EventSubscriberInterface
 {
     private $encoder;
-    private $manager;
 
-    public function __construct(UserPasswordEncoderInterface $encoder,EntityManagerInterface $manager)
+    public function __construct(UserPasswordEncoderInterface $encoder)
     {
         $this->encoder = $encoder;
-        $this->manager = $manager;
     }
 
     public static function getEntityFqcn(): string
@@ -39,12 +37,12 @@ class UserCrudController extends AbstractCrudController implements EventSubscrib
     public static function getSubscribedEvents()
     {
         return [
-            BeforeEntityPersistedEvent::class => ['addPass']
+            BeforeEntityPersistedEvent::class => ['addPassword']
         ];
     }
 
     //Avec evenement
-    public function addPass(BeforeEntityPersistedEvent $event){
+    public function addPassword(BeforeEntityPersistedEvent $event){
         $user = $event->getEntityInstance();
         $user->setPlainPassword('test');
         $user->setPassword($user->encodePassword($this->encoder));
